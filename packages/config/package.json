@@ -1,0 +1,16 @@
+{
+  "name": "@pivoshenko/config",
+  "version": "0.1.0",
+  "description": "Shared Biome and TypeScript configuration for pivoshenko sites",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pivoshenko/pivoshenko.ui.git",
+    "directory": "packages/config"
+  },
+  "files": ["biome.json", "tsconfig.base.json"],
+  "exports": {
+    "./biome.json": "./biome.json",
+    "./tsconfig.base.json": "./tsconfig.base.json"
+  }
+}

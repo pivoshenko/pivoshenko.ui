@@ -1,0 +1,23 @@
+{
+  "name": "pivoshenko.ui",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Shared frontend packages for the pivoshenko sites",
+  "license": "MIT",
+  "author": "Volodymyr Pivoshenko",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pivoshenko/pivoshenko.ui.git"
+  },
+  "packageManager": "pnpm@10.30.3",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "lint": "biome check .",
+    "format": "biome check --write ."
+  },
+  "devDependencies": {
+    "@biomejs/biome": "1.9.4"
+  }
+}

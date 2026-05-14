@@ -1,0 +1,16 @@
+{
+  "name": "@pivoshenko/tailwind-preset",
+  "version": "0.1.0",
+  "description": "Tailwind preset built from the morok palette. Vendored from pivoshenko.theme.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pivoshenko/pivoshenko.ui.git",
+    "directory": "packages/tailwind-preset"
+  },
+  "main": "./index.js",
+  "files": ["index.js", "morok.js"],
+  "peerDependencies": {
+    "tailwindcss": "^3.4.0"
+  }
+}
