@@ -41,19 +41,3 @@ Point a site at your local clone via `pnpm.overrides` (do not commit):
 }
 ```
 
-## Releases
-
-```bash
-git tag vX.Y.Z
-git push --tags
-```
-
-Tags are immutable. Bump pins in each consuming site's `package.json` after a release.
-
-## Workflow
-
-```bash
-just install
-just format
-just lint
-```

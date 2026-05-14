@@ -41,6 +41,7 @@ just release vX.Y.Z # tag + push
 
 - **No npm publish.** Distribution is exclusively via git dependency: `github:pivoshenko/pivoshenko.ui#vX.Y.Z`.
 - **Tags are immutable.** Never force-push. Cut a new tag for every meaningful change.
+- **Releases go through `.github/workflows/release.yml`** (manual `workflow_dispatch`). The workflow validates the version format, ensures the tag is fresh, runs `pnpm install --frozen-lockfile` + `pnpm lint`, pushes the tag, and creates a GitHub Release with auto-generated notes. `just release` is the local fallback — skips lint.
 - **Tailwind preset is vendored.** `packages/tailwind-preset/morok.js` is the source-of-truth artifact consumers see. To refresh: `cd ../pivoshenko.theme && just render`, then `just vendor-preset` here. Then bump `packages/tailwind-preset/package.json` and tag.
 - **`@pivoshenko/ui` exports source TS** (not built JS). Consuming sites build it via Next's transpilation. Add new packages to the site's `transpilePackages` in `next.config.ts` if needed.
 - **Peer deps, not dependencies.** React, Next, `next-themes`, Tailwind are peers — sites bring their own versions.
