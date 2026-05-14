@@ -7,20 +7,6 @@ settings:
 importers:
 
   .:
-    devDependencies:
-      '@biomejs/biome':
-        specifier: 1.9.4
-        version: 1.9.4
-
-  packages/config: {}
-
-  packages/tailwind-preset:
-    dependencies:
-      tailwindcss:
-        specifier: ^3.4.0
-        version: 3.4.19
-
-  packages/ui:
     dependencies:
       next:
         specifier: ^16.0.0
@@ -34,6 +20,13 @@ importers:
       react-dom:
         specifier: ^19.0.0
         version: 19.2.6(react@19.2.6)
+      tailwindcss:
+        specifier: ^3.4.0
+        version: 3.4.19
+    devDependencies:
+      '@biomejs/biome':
+        specifier: 1.9.4
+        version: 1.9.4
 
 packages:
 

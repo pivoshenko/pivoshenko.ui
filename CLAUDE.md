@@ -4,53 +4,78 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Repository purpose
 
-Shared frontend packages for the four `pivoshenko.*` Next.js sites. Distributed via git tags, never npm. Each site pins a tag in its `package.json`.
+Single npm-style package consumed as a **git dependency** by the four `pivoshenko.*` Next.js sites. No npm publish — sites pin a git tag in `package.json`.
 
 ## Structure
 
 ```
 pivoshenko.ui/
-  pnpm-workspace.yaml       # packages/*
-  package.json              # private workspace root
-  biome.json                # repo-level lint/format
+  package.json              # name: "pivoshenko.ui" — single package, subpath exports
+  biome.json                # repo-level lint/format (self-linting)
   justfile                  # format / lint / install / update / vendor-preset / release
-  packages/
-    config/                 # @pivoshenko/config — biome.json + tsconfig.base.json
-    tailwind-preset/        # @pivoshenko/tailwind-preset — morok.js (vendored) + index.js re-export
-    ui/                     # @pivoshenko/ui — React components + globals.css
+  config/
+    biome.json              # exported as 'pivoshenko.ui/biome.json'
+    tsconfig.base.json      # exported as 'pivoshenko.ui/tsconfig.base.json'
+  tailwind-preset/
+    morok.js                # vendored from pivoshenko.theme/morok/dist/tailwind/morok.js
+    index.js                # re-export; exported as 'pivoshenko.ui/tailwind-preset'
+  ui/
+    src/index.ts            # React components — exported as 'pivoshenko.ui' (main)
+```
+
+## Consumption
+
+```jsonc
+// site's package.json
+"dependencies": {
+  "pivoshenko.ui": "github:pivoshenko/pivoshenko.ui#vX.Y.Z"
+}
+```
+
+```ts
+// tailwind.config.ts
+import morok from 'pivoshenko.ui/tailwind-preset'
+```
+
+```json
+// biome.json — must use a relative path; Biome 1.x doesn't resolve npm-style names
+{ "extends": ["./node_modules/pivoshenko.ui/config/biome.json"] }
+```
+
+```json
+// tsconfig.json
+{ "extends": "pivoshenko.ui/tsconfig.base.json" }
 ```
 
 ## Commands
 
 ```bash
-just install        # pnpm install at workspace root
+just install        # pnpm install
 just format         # biome write
-just lint           # biome check (lint + format check)
+just lint           # biome check
 just vendor-preset  # copy fresh Tailwind preset from sibling pivoshenko.theme
-just release vX.Y.Z # tag + push
+just release vX.Y.Z # local fallback; prefer the GitHub Actions release workflow
 ```
 
 ## Stack
 
-- pnpm workspaces (internal only — sites do NOT join this workspace).
-- Biome 1.9.4 — single quotes, no semis, trailing commas, 2-space, 80-col.
-- `tsconfig.base.json` for sites to extend; no build step here.
+- Single-package repo (NO pnpm workspace — that pattern doesn't work for git-dep monorepos because pnpm symlinks the whole repo as one package).
+- Biome 1.9.4. Self-lints via root `biome.json`.
 - Node `>=22`.
 
 ## Key conventions
 
-- **No npm publish.** Distribution is exclusively via git dependency: `github:pivoshenko/pivoshenko.ui#vX.Y.Z`.
+- **One package, one version.** When anything ships, bump `package.json` version and cut a new tag.
 - **Tags are immutable.** Never force-push. Cut a new tag for every meaningful change.
-- **Releases go through `.github/workflows/release.yml`** (manual `workflow_dispatch`). The workflow validates the version format, ensures the tag is fresh, runs `pnpm install --frozen-lockfile` + `pnpm lint`, pushes the tag, and creates a GitHub Release with auto-generated notes. `just release` is the local fallback — skips lint.
-- **Tailwind preset is vendored.** `packages/tailwind-preset/morok.js` is the source-of-truth artifact consumers see. To refresh: `cd ../pivoshenko.theme && just render`, then `just vendor-preset` here. Then bump `packages/tailwind-preset/package.json` and tag.
-- **`@pivoshenko/ui` exports source TS** (not built JS). Consuming sites build it via Next's transpilation. Add new packages to the site's `transpilePackages` in `next.config.ts` if needed.
-- **Peer deps, not dependencies.** React, Next, `next-themes`, Tailwind are peers — sites bring their own versions.
-- **biome.json files coexist.** The root `biome.json` lints this repo. `packages/config/biome.json` is the artifact sites extend. Keep them aligned manually for now.
+- **Releases go through `.github/workflows/release.yml`** (manual `workflow_dispatch`). Validates the version format, ensures the tag is fresh, runs lint, pushes the tag, and creates a GitHub Release with auto-generated notes. `just release` is the local fallback — skips lint.
+- **Tailwind preset is vendored.** `tailwind-preset/morok.js` is the source-of-truth artifact consumers see. To refresh: `cd ../pivoshenko.theme && just render`, then `just vendor-preset` here. Then bump version and tag.
+- **React components export source TS** (not built JS). Consuming sites build them via Next's transpilation. Add `pivoshenko.ui` to a site's `transpilePackages` in `next.config.ts` once components ship.
+- **Peer deps, not deps.** React, Next, `next-themes`, Tailwind are peers — sites bring their own versions. All marked optional so config-only consumers don't trip on missing React.
 
-## When editing packages
+## When editing the repo
 
-- Bump the affected `packages/<name>/package.json` version when shipping a change. Match the git tag exactly (no `v` prefix in `package.json`, `v` prefix in the tag).
-- Update the consumer migration in [`me/openspec/changes/shared-frontend-foundation/tasks.md`](../openspec/changes/shared-frontend-foundation/tasks.md) if new packages or behaviors land.
+- Bump `package.json` version when shipping a change. Match the git tag exactly (no `v` prefix in `package.json`, `v` prefix in the tag).
+- Update the consumer migration in [`me/openspec/changes/shared-frontend-foundation/tasks.md`](../openspec/changes/shared-frontend-foundation/tasks.md) when new artifacts land.
 
 ## Cross-cutting context
 
