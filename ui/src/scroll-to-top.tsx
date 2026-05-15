@@ -1,39 +1,34 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { IconButton } from './buttons'
 
 type ScrollToTopProps = {
   threshold?: number
 }
 
-export function ScrollToTop({ threshold = 300 }: ScrollToTopProps = {}) {
+export function ScrollToTop({ threshold = 240 }: ScrollToTopProps = {}) {
   const [visible, setVisible] = useState(false)
 
   useEffect(() => {
-    const onScroll = () => {
-      setVisible(window.scrollY > threshold)
-    }
-
-    window.addEventListener('scroll', onScroll, { passive: true })
+    const onScroll = () => setVisible(window.scrollY > threshold)
     onScroll()
+    window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)
   }, [threshold])
 
-  const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' })
-  }
-
-  if (!visible) return null
-
   return (
-    <button
-      type="button"
-      onClick={scrollToTop}
-      aria-label="Scroll to top"
-      className="fixed bottom-6 right-6 z-50 w-8 h-8 flex items-center justify-center border border-ui fg-muted hover-secondary transition-colors bg-stone-50 dark:bg-black"
+    <IconButton
+      onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+      aria-label="Back to top"
+      className={`fixed bottom-5 right-5 z-50 w-9 h-9 transition-all ${
+        visible
+          ? 'opacity-100 translate-y-0 pointer-events-auto'
+          : 'opacity-0 translate-y-2 pointer-events-none'
+      }`}
     >
       <svg
-        xmlns="http://www.w3.org/2000/svg"
+        aria-hidden="true"
         width="14"
         height="14"
         viewBox="0 0 24 24"
@@ -42,10 +37,10 @@ export function ScrollToTop({ threshold = 300 }: ScrollToTopProps = {}) {
         strokeWidth="2"
         strokeLinecap="round"
         strokeLinejoin="round"
-        aria-hidden="true"
       >
-        <polyline points="18 15 12 9 6 15" />
+        <path d="M12 19V5" />
+        <path d="m5 12 7-7 7 7" />
       </svg>
-    </button>
+    </IconButton>
   )
 }
