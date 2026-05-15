@@ -2,6 +2,8 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import type { ReactNode } from 'react'
+import { Logo } from './logo'
 import { ThemeToggle } from './theme-toggle'
 
 export type NavLink = {
@@ -13,9 +15,10 @@ export type NavLink = {
 type NavProps = {
   brand: string
   links?: NavLink[]
+  logo?: ReactNode
 }
 
-export function Nav({ brand, links = [] }: NavProps) {
+export function Nav({ brand, links = [], logo }: NavProps) {
   const pathname = usePathname()
   const hasInternal = links.some((l) => !l.external)
 
@@ -24,8 +27,9 @@ export function Nav({ brand, links = [] }: NavProps) {
       <nav className="max-w-6xl mx-auto px-4 h-14 flex items-center justify-between">
         <Link
           href="/"
-          className="type-logo fg-primary hover:opacity-60 transition-opacity"
+          className="type-logo fg-primary hover:opacity-60 transition-opacity inline-flex items-center gap-2"
         >
+          {logo ?? <Logo />}
           {brand}
         </Link>
 
