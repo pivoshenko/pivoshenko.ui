@@ -1,6 +1,6 @@
 {
   "name": "pivoshenko.ui",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "description": "Shared frontend artifacts for the pivoshenko sites (Biome config, TS base, Tailwind preset, React components)",
   "license": "MIT",
   "author": "Volodymyr Pivoshenko",
@@ -20,6 +20,7 @@
       "types": "./tailwind-preset/index.d.ts",
       "default": "./tailwind-preset/index.js"
     },
+    "./globals.css": "./ui/globals.css",
     ".": "./ui/src/index.ts"
   },
   "peerDependencies": {
@@ -41,6 +42,11 @@
     "format": "biome check --write ."
   },
   "devDependencies": {
-    "@biomejs/biome": "1.9.4"
+    "@biomejs/biome": "1.9.4",
+    "@types/react": "^19.2.14",
+    "next": "^16.2.6",
+    "next-themes": "^0.4.6",
+    "react": "^19.2.6",
+    "typescript": "^5.9.3"
   }
 }
