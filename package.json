@@ -2,7 +2,7 @@
   "name": "pivoshenko.ui",
   "version": "0.6.3",
   "description": "Shared frontend artifacts for the pivoshenko sites (Biome config, TS base, Tailwind preset, React components)",
-  "license": "MIT",
+  "license": "SEE LICENSE IN LICENSE",
   "author": "Volodymyr Pivoshenko",
   "repository": {
     "type": "git",
