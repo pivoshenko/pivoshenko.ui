@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react'
 import { Footer, type FooterLink } from './footer'
 import { Nav, type NavLink } from './nav'
+import { ScrollToTop } from './scroll-to-top'
 
 type PageShellProps = {
   brand: string
@@ -16,12 +17,15 @@ export function PageShell({
   children,
 }: PageShellProps) {
   return (
-    <div className="min-h-screen flex flex-col">
-      <Nav brand={brand} links={navLinks} />
-      <main className="flex-1 w-full max-w-6xl mx-auto px-4 py-6">
-        {children}
-      </main>
-      <Footer extras={footerExtras} />
-    </div>
+    <>
+      <div className="min-h-screen flex flex-col">
+        <Nav brand={brand} links={navLinks} />
+        <main className="flex-1 w-full max-w-6xl mx-auto px-4 py-6">
+          {children}
+        </main>
+        <Footer extras={footerExtras} />
+      </div>
+      <ScrollToTop />
+    </>
   )
 }
