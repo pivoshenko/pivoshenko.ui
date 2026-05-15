@@ -12,6 +12,40 @@ export function TextInput({ className = '', ...rest }: TextInputProps) {
   )
 }
 
+const SearchIcon = () => (
+  <svg
+    aria-hidden="true"
+    width="14"
+    height="14"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <circle cx="11" cy="11" r="8" />
+    <line x1="21" y1="21" x2="16.65" y2="16.65" />
+  </svg>
+)
+
+const ClearIcon = () => (
+  <svg
+    aria-hidden="true"
+    width="12"
+    height="12"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <line x1="18" y1="6" x2="6" y2="18" />
+    <line x1="6" y1="6" x2="18" y2="18" />
+  </svg>
+)
+
 type SearchInputProps = InputHTMLAttributes<HTMLInputElement> & {
   leading?: ReactNode
   trailing?: ReactNode
@@ -19,7 +53,7 @@ type SearchInputProps = InputHTMLAttributes<HTMLInputElement> & {
 }
 
 export function SearchInput({
-  leading,
+  leading = <SearchIcon />,
   trailing,
   onClear,
   value,
@@ -45,7 +79,7 @@ export function SearchInput({
           onClick={onClear}
           className="fg-muted hover-secondary"
         >
-          ×
+          <ClearIcon />
         </button>
       ) : null}
       {trailing ? <span className="fg-muted">{trailing}</span> : null}
