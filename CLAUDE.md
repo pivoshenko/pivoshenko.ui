@@ -12,7 +12,7 @@ Single npm-style package consumed as a **git dependency** by the four `pivoshenk
 pivoshenko.ui/
   package.json              # name: "pivoshenko.ui" — single package, subpath exports
   biome.json                # repo-level lint/format (self-linting)
-  justfile                  # format / lint / install / update / vendor-preset / release
+  justfile                  # install / format / lint / check / update / vendor-preset / release
   config/
     biome.json              # exported as 'pivoshenko.ui/biome.json'
     tsconfig.base.json      # exported as 'pivoshenko.ui/tsconfig.base.json'
@@ -53,6 +53,7 @@ import morok from 'pivoshenko.ui/tailwind-preset'
 just install        # pnpm install
 just format         # biome write
 just lint           # biome check
+just check          # full gate (alias for lint — no build step)
 just vendor-preset  # copy fresh Tailwind preset from sibling pivoshenko.theme
 just release vX.Y.Z # local fallback; prefer the GitHub Actions release workflow
 ```

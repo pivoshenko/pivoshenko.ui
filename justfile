@@ -1,14 +1,17 @@
+default:
+    @just --list
+
+install:
+    pnpm install
+
 format:
     pnpm format
-
-check:
-    pnpm lint
 
 lint:
     pnpm lint
 
-install:
-    pnpm install
+# No build step — source TS is transpiled by consuming sites. Gate == lint.
+check: lint
 
 update:
     pnpm update -r
