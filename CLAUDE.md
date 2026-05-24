@@ -17,7 +17,7 @@ pivoshenko.ui/
     biome.json              # exported as 'pivoshenko.ui/biome.json'
     tsconfig.base.json      # exported as 'pivoshenko.ui/tsconfig.base.json'
   tailwind-preset/
-    morok.js                # vendored from pivoshenko.theme/morok/dist/tailwind/morok.js
+    morok.js                # vendored from pivoshenko.theme/themes/dist/tailwind/morok.js
     index.js                # re-export; exported as 'pivoshenko.ui/tailwind-preset'
   ui/
     src/index.ts            # React components — exported as 'pivoshenko.ui' (main)
@@ -76,8 +76,8 @@ just release vX.Y.Z # local fallback; prefer the GitHub Actions release workflow
 ## When editing the repo
 
 - Bump `package.json` version when shipping a change. Match the git tag exactly (no `v` prefix in `package.json`, `v` prefix in the tag).
-- Update the consumer migration in [`me/openspec/changes/shared-frontend-foundation/tasks.md`](../openspec/changes/shared-frontend-foundation/tasks.md) when new artifacts land.
+- When new shared artifacts land, bump the `pivoshenko.ui` tag in all four consumer sites.
 
 ## Cross-cutting context
 
-See `me/CLAUDE.md` for the four-site layout and [the shared-frontend-foundation OpenSpec change](../openspec/changes/shared-frontend-foundation/) for the full pipeline rationale.
+See `me/CLAUDE.md` for the four-site layout and the shared-UI pipeline rationale.
