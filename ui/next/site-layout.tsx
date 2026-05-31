@@ -2,10 +2,10 @@ import { Analytics } from '@vercel/analytics/next'
 import type { Metadata, Viewport } from 'next'
 import { JetBrains_Mono } from 'next/font/google'
 import type { ReactNode } from 'react'
+import { palette } from '../palette'
 import type { FooterLink } from '../src/footer'
 import type { NavLink } from '../src/nav'
 import { PageShell } from '../src/page-shell'
-import { palette } from '../palette'
 
 // Shared viewport — themeColor tracks the active palette's bg canvas.
 // Each site re-exports as `viewport` from its app/layout.tsx (Next reads

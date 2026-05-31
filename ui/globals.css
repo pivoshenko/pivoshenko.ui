@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-@import './tokens.css';
+@import "./tokens.css";
 
 @layer components {
   /* --- Typography --- */

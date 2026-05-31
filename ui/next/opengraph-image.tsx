@@ -36,9 +36,7 @@ function OgCard({
         fontFamily: 'JetBrains Mono',
       }}
     >
-      <div
-        style={{ display: 'flex', fontSize: 28, color: palette.fg.subtle }}
-      >
+      <div style={{ display: 'flex', fontSize: 28, color: palette.fg.subtle }}>
         {brand}
       </div>
       <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
@@ -65,9 +63,7 @@ function OgCard({
           {subtitle}
         </div>
       </div>
-      <div
-        style={{ display: 'flex', fontSize: 24, color: palette.fg.subtle }}
-      >
+      <div style={{ display: 'flex', fontSize: 24, color: palette.fg.subtle }}>
         <span>{domain}</span>
       </div>
     </div>
