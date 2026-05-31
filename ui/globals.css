@@ -103,6 +103,10 @@
     @apply bg-bg-canvas text-fg-default font-mono antialiased;
   }
 
+  a:not([class]) {
+    @apply text-accent-secondary underline decoration-accent-secondary/40 underline-offset-2 hover:decoration-accent-secondary transition-colors;
+  }
+
   ::selection {
     background-color: rgb(var(--bg-overlay));
   }
