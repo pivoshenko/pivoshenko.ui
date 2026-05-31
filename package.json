@@ -1,6 +1,6 @@
 {
   "name": "pivoshenko.ui",
-  "version": "0.8.0",
+  "version": "0.8.1",
   "description": "Shared frontend artifacts for the pivoshenko sites (Biome config, TS base, Tailwind preset, React components)",
   "license": "SEE LICENSE IN LICENSE",
   "author": "Volodymyr Pivoshenko",
@@ -21,7 +21,10 @@
       "types": "./tailwind-preset/index.d.ts",
       "default": "./tailwind-preset/index.js"
     },
-    "./tailwind-preset/site": "./tailwind-preset/site.js",
+    "./tailwind-preset/site": {
+      "types": "./tailwind-preset/site.d.ts",
+      "default": "./tailwind-preset/site.js"
+    },
     "./globals.css": "./ui/globals.css",
     "./next/icon": "./ui/next/icon.tsx",
     "./next/opengraph-image": "./ui/next/opengraph-image.tsx",
