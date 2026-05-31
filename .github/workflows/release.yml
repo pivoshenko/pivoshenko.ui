@@ -22,10 +22,8 @@ jobs:
             exit 1
           fi
 
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
+      - name: Checkout repository
+        uses: actions/checkout@v6
 
       - name: Ensure tag does not already exist
         run: |
