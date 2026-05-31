@@ -1,7 +1,7 @@
 const path = require('node:path')
-const morok = require('./morok.js')
+const preset = require('./preset.js')
 
-// Re-export the morok palette preset, augmented with a content glob pointing
+// Re-export the role-layer preset, augmented with a content glob pointing
 // at this package's component sources. Without this, Tailwind's content
 // scanner only sees the consuming site's files and prunes every class used
 // inside `pivoshenko.ui` components (Footer, Nav, PageShell, Tag, Card, ...).
@@ -12,6 +12,6 @@ const morok = require('./morok.js')
 const pkgRoot = path.resolve(__dirname, '..')
 
 module.exports = {
-  ...morok,
+  ...preset,
   content: [`${pkgRoot}/ui/src/**/*.{ts,tsx}`],
 }

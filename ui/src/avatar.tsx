@@ -18,7 +18,7 @@ export function Avatar({ initials, size = 32, className = '' }: AvatarProps) {
   return (
     <span
       aria-label={initials}
-      className={`inline-flex items-center justify-center bg-black dark:bg-white text-white dark:text-black font-mono font-semibold tracking-tight ${sizeClass[size]} ${className}`}
+      className={`inline-flex items-center justify-center bg-fg-default text-bg-canvas font-mono font-semibold tracking-tight ${sizeClass[size]} ${className}`}
     >
       {initials.toUpperCase()}
     </span>

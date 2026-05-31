@@ -15,7 +15,7 @@ export function IconButton({
     <button
       type="button"
       {...rest}
-      className={`w-8 h-8 inline-flex items-center justify-center border border-ui rounded bg-stone-50 dark:bg-black ${state} disabled:opacity-40 transition-colors ${className}`}
+      className={`w-8 h-8 inline-flex items-center justify-center border border-ui rounded bg-bg-canvas ${state} disabled:opacity-40 transition-colors ${className}`}
     >
       {children}
     </button>
@@ -32,7 +32,7 @@ export function CopyPill({
   children,
   ...rest
 }: CopyPillProps) {
-  const tone = copied ? 'text-morok-green' : 'fg-muted hover-secondary'
+  const tone = copied ? 'text-accent-success' : 'fg-muted hover-secondary'
   return (
     <button
       type="button"

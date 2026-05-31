@@ -7,7 +7,7 @@ export function Menu({ className = '', children, ...rest }: MenuProps) {
     <div
       role="menu"
       {...rest}
-      className={`bg-white dark:bg-black border border-ui rounded shadow-none min-w-[12rem] py-1 ${className}`}
+      className={`bg-bg-surface border border-ui rounded shadow-none min-w-[12rem] py-1 ${className}`}
     >
       {children}
     </div>

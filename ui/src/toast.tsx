@@ -9,10 +9,10 @@ type ToastProps = {
 export function Toast({ icon, children, className = '' }: ToastProps) {
   return (
     <output
-      className={`inline-flex items-center gap-2 bg-white dark:bg-stone-950 border border-ui rounded px-3 py-2 font-mono text-sm fg-secondary ${className}`}
+      className={`inline-flex items-center gap-2 bg-bg-surface border border-ui rounded px-3 py-2 font-mono text-sm fg-secondary ${className}`}
     >
       {icon ? (
-        <span className="flex-shrink-0 text-morok-green">{icon}</span>
+        <span className="flex-shrink-0 text-accent-success">{icon}</span>
       ) : null}
       <span>{children}</span>
     </output>

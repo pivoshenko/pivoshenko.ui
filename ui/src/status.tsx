@@ -10,12 +10,11 @@ type StatusBadgeProps = {
 }
 
 const tone: Record<StatusVariant, string> = {
-  success: 'bg-morok-green/15 text-[#6f8a6d] dark:text-morok-green',
-  warning: 'bg-morok-peach/15 text-[#a17849] dark:text-morok-peach',
-  error: 'bg-morok-red/15 text-[#b06a6a] dark:text-morok-red',
-  info: 'bg-morok-blue/15 text-[#6383ad] dark:text-morok-lavender',
-  neutral:
-    'bg-stone-100 text-stone-500 dark:bg-stone-800/70 dark:text-stone-400',
+  success: 'bg-accent-success/15 text-accent-success',
+  warning: 'bg-accent-warning/15 text-accent-warning',
+  error: 'bg-accent-danger/15 text-accent-danger',
+  info: 'bg-accent-info/15 text-accent-info',
+  neutral: 'bg-bg-raised text-fg-subtle',
 }
 
 export function StatusBadge({

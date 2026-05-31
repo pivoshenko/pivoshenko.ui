@@ -1,0 +1,33 @@
+/* Semantic design tokens (role layer).
+ * Values are space-separated R G B triples for use with
+ * rgb(var(--token) / <alpha-value>) in Tailwind / shadcn-style configs.
+ * Scoped to `:root` — the vendored palette IS the active palette.
+ * Regenerate via `just vendor-preset` in pivoshenko.ui.
+ */
+:root {
+  /* Background */
+  --bg-canvas: 31 31 30;
+  --bg-surface: 38 38 37;
+  --bg-raised: 46 46 44;
+  --bg-sunken: 26 26 25;
+  --bg-overlay: 87 83 78;
+
+  /* Foreground */
+  --fg-default: 228 226 222;
+  --fg-muted: 184 179 168;
+  --fg-subtle: 155 149 138;
+  --fg-faint: 120 113 108;
+
+  /* Border */
+  --border-subtle: 38 38 37;
+  --border-default: 46 46 44;
+  --border-strong: 55 54 52;
+
+  /* Accent */
+  --accent-primary: 217 119 87;
+  --accent-secondary: 212 168 90;
+  --accent-success: 138 157 104;
+  --accent-warning: 212 168 90;
+  --accent-danger: 200 122 114;
+  --accent-info: 123 160 196;
+}

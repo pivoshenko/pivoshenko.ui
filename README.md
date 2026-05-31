@@ -16,8 +16,8 @@ Shared frontend artifacts (Biome config, TypeScript base, Tailwind preset, React
 | ---------------------------------------- | ------------------------------------------------- |
 | `pivoshenko.ui/biome.json`               | Shared Biome config                               |
 | `pivoshenko.ui/tsconfig.base.json`       | Shared TypeScript base                            |
-| `pivoshenko.ui/tailwind-preset`          | Tailwind preset (morok palette + dark mode class) |
-| `pivoshenko.ui`                          | React components (Footer, Nav, ThemeToggle, …)    |
+| `pivoshenko.ui/tailwind-preset`          | Tailwind preset (role layer, flavor-agnostic)     |
+| `pivoshenko.ui`                          | React components (Footer, Nav, PageShell, …)      |
 
 ## Consumption
 
@@ -30,9 +30,9 @@ Shared frontend artifacts (Biome config, TypeScript base, Tailwind preset, React
 
 ```ts
 // tailwind.config.ts
-import morok from 'pivoshenko.ui/tailwind-preset'
+import preset from 'pivoshenko.ui/tailwind-preset'
 
-export default { presets: [morok], content: [...] }
+export default { presets: [preset], content: [...] }
 ```
 
 ```json

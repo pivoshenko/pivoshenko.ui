@@ -4,7 +4,6 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import type { ReactNode } from 'react'
 import { Logo } from './logo'
-import { ThemeToggle } from './theme-toggle'
 
 export type NavLink = {
   href: string
@@ -20,7 +19,6 @@ type NavProps = {
 
 export function Nav({ brand, links = [], logo }: NavProps) {
   const pathname = usePathname()
-  const hasInternal = links.some((l) => !l.external)
 
   return (
     <header className="w-full border-b border-ui">
@@ -64,15 +62,6 @@ export function Nav({ brand, links = [], logo }: NavProps) {
               </Link>
             )
           })}
-          <div
-            className={
-              hasInternal || links.length > 0
-                ? 'ml-1 pl-2 border-l border-ui'
-                : ''
-            }
-          >
-            <ThemeToggle />
-          </div>
         </div>
       </nav>
     </header>

@@ -11,10 +11,10 @@ type AlertProps = {
 }
 
 const accent: Record<AlertVariant, string> = {
-  info: 'text-morok-blue',
-  success: 'text-morok-green',
-  warning: 'text-morok-peach',
-  error: 'text-morok-red',
+  info: 'text-accent-info',
+  success: 'text-accent-success',
+  warning: 'text-accent-warning',
+  error: 'text-accent-danger',
 }
 
 export function Alert({
@@ -28,7 +28,7 @@ export function Alert({
   return (
     <div
       role="alert"
-      className={`flex gap-3 bg-white dark:bg-stone-950 border border-ui rounded px-3 py-2 font-mono text-sm fg-secondary ${className}`}
+      className={`flex gap-3 bg-bg-surface border border-ui rounded px-3 py-2 font-mono text-sm fg-secondary ${className}`}
     >
       {icon ? (
         <span className={`flex-shrink-0 mt-0.5 ${tone}`}>{icon}</span>

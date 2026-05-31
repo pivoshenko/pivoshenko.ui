@@ -32,6 +32,6 @@
     }
   },
   "files": {
-    "ignore": ["node_modules", "dist", "**/morok.js"]
+    "ignore": ["node_modules", "dist", "tailwind-preset/preset.js"]
   }
 }

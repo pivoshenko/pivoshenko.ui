@@ -2,6 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
+@import './tokens.css';
+
 @layer components {
   /* --- Typography --- */
   .type-heading {
@@ -28,61 +30,61 @@
     @apply text-sm font-semibold font-mono tracking-tight;
   }
 
-  /* --- Foreground colors --- */
+  /* --- Foreground colors (role-mapped) --- */
   .fg-primary {
-    @apply text-stone-900 dark:text-stone-100;
+    @apply text-fg-default;
   }
 
   .fg-title {
-    @apply text-stone-800 dark:text-stone-200;
+    @apply text-fg-default;
   }
 
   .fg-secondary {
-    @apply text-stone-700 dark:text-stone-300;
+    @apply text-fg-default;
   }
 
   .fg-body {
-    @apply text-stone-600 dark:text-stone-400;
+    @apply text-fg-muted;
   }
 
   .fg-subtle {
-    @apply text-stone-500 dark:text-stone-400;
+    @apply text-fg-subtle;
   }
 
   .fg-muted {
-    @apply text-stone-400 dark:text-stone-500;
+    @apply text-fg-faint;
   }
 
   /* --- Hover foreground --- */
   .hover-primary {
-    @apply hover:text-stone-900 dark:hover:text-stone-100;
+    @apply hover:text-fg-default;
   }
 
   .hover-secondary {
-    @apply hover:text-stone-700 dark:hover:text-stone-300;
+    @apply hover:text-fg-muted;
   }
 
   /* --- Backgrounds --- */
   .bg-tag {
-    @apply bg-stone-100 dark:bg-stone-800/70;
+    @apply bg-bg-raised;
   }
 
   .bg-tag-active {
-    @apply bg-stone-900 text-stone-50 dark:bg-stone-100 dark:text-stone-900;
+    @apply bg-fg-default text-bg-canvas;
   }
 
   /* --- Borders --- */
   .border-ui {
-    @apply border-stone-200 dark:border-stone-800;
+    @apply border-border-default;
   }
 
   .border-faint {
-    @apply border-stone-100 dark:border-stone-800/60;
+    @apply border-border-subtle;
   }
 
   /* --- Underline decoration --- */
   .deco-subtle {
-    @apply decoration-stone-300 dark:decoration-stone-600;
+    @apply decoration-fg-faint;
   }
 }
 
@@ -98,15 +100,11 @@
   }
 
   body {
-    @apply bg-stone-50 text-stone-900 dark:bg-black dark:text-stone-100 font-mono antialiased;
+    @apply bg-bg-canvas text-fg-default font-mono antialiased;
   }
 
   ::selection {
-    background-color: theme("colors.stone.200");
-  }
-
-  .dark ::selection {
-    background-color: theme("colors.stone.700");
+    background-color: rgb(var(--bg-overlay));
   }
 
   * {

@@ -35,7 +35,7 @@ export function Tab({ active, className = '', children, ...rest }: TabProps) {
       {active ? (
         <span
           aria-hidden
-          className="absolute inset-x-0 -bottom-px h-px bg-morok-blue dark:bg-morok-lavender"
+          className="absolute inset-x-0 -bottom-px h-px bg-accent-info"
         />
       ) : null}
     </button>
