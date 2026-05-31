@@ -54,13 +54,15 @@ just install        # pnpm install
 just format         # biome write
 just lint           # biome check
 just check          # full gate (alias for lint — no build step)
+just update         # pnpm update -r
+just audit          # pnpm audit (gate against transitive CVEs)
 just vendor-preset  # copy fresh Tailwind preset from sibling pivoshenko.theme
 just release vX.Y.Z # local fallback; prefer the GitHub Actions release workflow
 ```
 
 ## Stack
 
-- Single-package repo (NO pnpm workspace — that pattern doesn't work for git-dep monorepos because pnpm symlinks the whole repo as one package).
+- Single-package repo (NO pnpm workspace — that pattern doesn't work for git-dep monorepos because pnpm symlinks the whole repo as one package). `pnpm-workspace.yaml` exists only to hold pnpm-10 settings (`ignoredBuiltDependencies`, `overrides`); it does NOT declare a `packages:` workspace.
 - Biome 1.9.4. Self-lints via root `biome.json`.
 - Node `>=22`.
 
@@ -72,6 +74,7 @@ just release vX.Y.Z # local fallback; prefer the GitHub Actions release workflow
 - **Tailwind preset is vendored.** `tailwind-preset/morok.js` is the source-of-truth artifact consumers see. To refresh: `cd ../pivoshenko.theme && just render`, then `just vendor-preset` here. Then bump version and tag.
 - **React components export source TS** (not built JS). Consuming sites build them via Next's transpilation. Add `pivoshenko.ui` to a site's `transpilePackages` in `next.config.ts` once components ship.
 - **Peer deps, not deps.** React, Next, `next-themes`, Tailwind are peers — sites bring their own versions. All marked optional so config-only consumers don't trip on missing React.
+- **Transitive CVE overrides live in `pnpm-workspace.yaml` `overrides:`** (pnpm 10 moved them out of `package.json`). Current pin: `postcss@<8.5.10 → >=8.5.10` to patch GHSA-qx2v-qp2m-jg93 leaking via `next`'s bundled postcss. Re-evaluate (and drop) when the bundled version moves past the floor.
 
 ## When editing the repo
 
