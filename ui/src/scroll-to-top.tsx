@@ -1,5 +1,6 @@
 'use client'
 
+import { ArrowUp } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { IconButton } from './buttons'
 
@@ -27,20 +28,7 @@ export function ScrollToTop({ threshold = 240 }: ScrollToTopProps = {}) {
           : 'opacity-0 translate-y-2 pointer-events-none'
       }`}
     >
-      <svg
-        aria-hidden="true"
-        width="14"
-        height="14"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      >
-        <path d="M12 19V5" />
-        <path d="m5 12 7-7 7 7" />
-      </svg>
+      <ArrowUp size={14} strokeWidth={2} aria-hidden="true" />
     </IconButton>
   )
 }

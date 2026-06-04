@@ -104,7 +104,7 @@
   }
 
   a:not([class]) {
-    @apply text-accent-secondary underline decoration-accent-secondary/40 underline-offset-2 hover:decoration-accent-secondary transition-colors;
+    @apply text-accent-primary underline decoration-accent-primary/40 underline-offset-2 hover:decoration-accent-primary transition-colors;
   }
 
   ::selection {

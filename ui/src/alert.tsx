@@ -17,6 +17,13 @@ const accent: Record<AlertVariant, string> = {
   error: 'text-accent-danger',
 }
 
+const wash: Record<AlertVariant, string> = {
+  info: 'bg-accent-info/15',
+  success: 'bg-accent-success/15',
+  warning: 'bg-accent-warning/15',
+  error: 'bg-accent-danger/15',
+}
+
 export function Alert({
   variant,
   title,
@@ -28,7 +35,7 @@ export function Alert({
   return (
     <div
       role="alert"
-      className={`flex gap-3 bg-bg-surface border border-ui rounded px-3 py-2 font-mono text-sm fg-secondary ${className}`}
+      className={`flex gap-3 ${wash[variant]} border border-ui rounded px-3 py-2 font-mono text-sm fg-secondary ${className}`}
     >
       {icon ? (
         <span className={`flex-shrink-0 mt-0.5 ${tone}`}>{icon}</span>

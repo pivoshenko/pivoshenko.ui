@@ -32,7 +32,7 @@ export function CopyPill({
   children,
   ...rest
 }: CopyPillProps) {
-  const tone = copied ? 'text-accent-success' : 'fg-muted hover-secondary'
+  const tone = copied ? 'text-accent-primary' : 'fg-muted hover-secondary'
   return (
     <button
       type="button"
