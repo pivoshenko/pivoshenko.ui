@@ -23,7 +23,7 @@ pivoshenko.ui/
   postcss.config.mjs        # shared PostCSS config; 'pivoshenko.ui/postcss.config.mjs'
   ui/
     tokens.css              # CSS vars scoped to :root — the vendored palette IS the active palette
-    palette.ts              # same palette as raw hex; used by OG image + Next themeColor (CSS vars don't reach edge runtime)
+    palette.ts              # same palette as raw hex; used by edge-runtime renderers — favicon (next/icon), OG image (next/opengraph-image), Next themeColor (CSS vars don't reach edge runtime)
     globals.css             # @imports tokens.css; exposes role-based helper classes
     next/
       icon.tsx              # shared favicon ImageResponse; 'pivoshenko.ui/next/icon'
@@ -96,4 +96,4 @@ just release vX.Y.Z # local fallback; prefer the GitHub Actions release workflow
 
 ## Cross-cutting context
 
-See `me/CLAUDE.md` for the four-site layout and the shared-UI pipeline rationale.
+See `sources/CLAUDE.md` for the four-site layout and the shared-UI pipeline rationale.
