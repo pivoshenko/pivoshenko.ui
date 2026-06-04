@@ -25,13 +25,12 @@ pivoshenko.ui/
     tokens.css              # CSS vars scoped to :root — the vendored palette IS the active palette
     palette.ts              # same palette as raw hex; used by edge-runtime renderers — favicon (next/icon), OG image (next/opengraph-image), Next themeColor (CSS vars don't reach edge runtime)
     globals.css             # @imports tokens.css; exposes role-based helper classes
+    src/index.ts            # React components — exported as 'pivoshenko.ui' (main)
     next/
       icon.tsx              # shared favicon ImageResponse; 'pivoshenko.ui/next/icon'
       opengraph-image.tsx   # createOgImage({brand,title,subtitle,domain}); 'pivoshenko.ui/next/opengraph-image'
       config.ts             # baseNextConfig; 'pivoshenko.ui/next/config'
       site-layout.tsx       # <SiteLayout> + siteMetadata() + siteViewport; 'pivoshenko.ui/next/site-layout'
-  ui/
-    src/index.ts            # React components — exported as 'pivoshenko.ui' (main)
 ```
 
 ## Consumption
