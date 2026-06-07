@@ -19,6 +19,9 @@ update:
 audit:
     pnpm audit
 
+test:
+    @[ -f .no-tests ] && echo "skipping (.no-tests sentinel)" || { echo "no test command — add tests or restore .no-tests" >&2; exit 1; }
+
 # Vendor the role-layer Tailwind preset + tokens CSS from pivoshenko.theme.
 # The vendored palette IS the active palette — pass a flavor name to swap.
 # Rewrites the tokens.css selector from [data-flavor="<flavor>"] to :root so
