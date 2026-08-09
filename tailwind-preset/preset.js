@@ -1,8 +1,8 @@
 /**
  * Flavor-agnostic Tailwind preset (role layer).
  *
- * Consumes the CSS variables defined in `pivoshenko.ui/ui/tokens.css`
- * (scoped to `:root` — whichever palette was vendored is active). The
+ * Consumes the CSS variables defined in `pivoshenko.ui/ui/tokens.css`,
+ * scoped to `:root`, so whichever palette was vendored is active. The
  * output of this preset is identical for every palette; only the
  * variable values change.
  *

@@ -1,7 +1,7 @@
 /* Semantic design tokens (role layer).
  * Values are space-separated R G B triples for use with
  * rgb(var(--token) / <alpha-value>) in Tailwind / shadcn-style configs.
- * Scoped to `:root` — the vendored palette IS the active palette.
+ * Scoped to `:root`, so the vendored palette IS the active palette.
  * Regenerate via `just vendor-preset` in pivoshenko.ui.
  */
 :root {
