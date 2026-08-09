@@ -31,7 +31,7 @@ Shared frontend artifacts (Biome config, TypeScript base, Tailwind preset, React
 ```jsonc
 // site's package.json
 "dependencies": {
-  "pivoshenko.ui": "github:pivoshenko/pivoshenko.ui#v0.9.3"
+  "pivoshenko.ui": "github:pivoshenko/pivoshenko.ui#v0.9.4"
 }
 ```
 
