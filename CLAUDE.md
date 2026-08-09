@@ -92,7 +92,3 @@ just release vX.Y.Z # local fallback; prefer the GitHub Actions release workflow
 
 - Bump `package.json` version when shipping a change. Match the git tag exactly (no `v` prefix in `package.json`, `v` prefix in the tag).
 - When new shared artifacts land, bump the `pivoshenko.ui` tag in all four consumer sites.
-
-## Cross-Cutting Context
-
-See `sources/CLAUDE.md` for the four-site layout and the shared-UI pipeline rationale.
