@@ -1,9 +1,9 @@
 const path = require('node:path')
 const preset = require('./preset.js')
 
-// Site-flavored preset: role layer + the JetBrains-Mono fontFamily override
-// every site needs (next/font writes the actual font into the
-// --font-jetbrains-mono CSS var from app/layout.tsx).
+// Site-flavored preset: role layer plus the JetBrains-Mono fontFamily override
+// every site needs. next/font writes the actual font into the
+// --font-jetbrains-mono CSS var from app/layout.tsx
 const pkgRoot = path.resolve(__dirname, '..')
 
 const fontFamily = {
@@ -23,8 +23,8 @@ module.exports = {
   },
 }
 
-// Helper for sites to spread their own content globs without redeclaring
-// the pivoshenko.ui source glob. Usage:
+// Lets sites spread their own content globs without redeclaring the
+// pivoshenko.ui source glob:
 //   content: withUiContent(['./app/**/*.{ts,tsx}', './components/**/*.{ts,tsx}'])
 module.exports.withUiContent = function withUiContent(siteGlobs) {
   return [...siteGlobs, `${pkgRoot}/ui/src/**/*.{ts,tsx}`]

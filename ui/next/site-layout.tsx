@@ -7,9 +7,8 @@ import type { FooterLink } from '../src/footer'
 import type { NavLink } from '../src/nav'
 import { PageShell } from '../src/page-shell'
 
-// Shared viewport — themeColor tracks the active palette's bg canvas.
-// Each site re-exports as `viewport` from its app/layout.tsx (Next reads
-// the symbol by name).
+// themeColor tracks the active palette's bg canvas. Each site re-exports this
+// as `viewport` from its app/layout.tsx, which Next reads by name
 export const siteViewport: Viewport = {
   themeColor: palette.bg.canvas,
 }

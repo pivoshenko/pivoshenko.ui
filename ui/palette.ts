@@ -1,13 +1,11 @@
-// The library's active palette in raw hex.
+// Active palette in raw hex. The source of truth is `ui/tokens.css` (CSS
+// variables consumed by the Tailwind preset); this module mirrors those values
+// for contexts CSS variables don't reach, such as edge-runtime OG images
+// (rendered to PNG via @vercel/og) and the Next `themeColor` meta tag.
 //
-// Source of truth lives in `ui/tokens.css` (CSS variables consumed by the
-// Tailwind preset). This module mirrors those values as plain hex strings
-// for contexts where CSS variables don't reach: edge-runtime OG images
-// (rendered to PNG via @vercel/og), Next `themeColor` meta tag, etc.
-//
-// Regenerate alongside `ui/tokens.css` via `just vendor-preset`. The two
-// files are paired — if you swap the vendored flavor, both must move
-// together so the off-DOM rendering matches the in-DOM look.
+// Regenerate alongside `ui/tokens.css` via `just vendor-preset`. The two files
+// are paired: swap the vendored flavor and both must move together, or off-DOM
+// rendering drifts from the in-DOM look
 export const palette = {
   bg: {
     canvas: '#1f1f1e',

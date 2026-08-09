@@ -1,5 +1,4 @@
-# Requires GitHub secrets
-# - GH_TOKEN
+# Requires a GH_TOKEN repository secret
 
 name: Labels
 

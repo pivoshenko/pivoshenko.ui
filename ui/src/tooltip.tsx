@@ -7,8 +7,8 @@ type TooltipProps = {
 }
 
 /**
- * CSS-only tooltip: visible on hover/focus of the wrapped trigger.
- * Uses peer-* selectors via a sibling element so no client JS is needed.
+ * CSS-only tooltip: visible on hover or focus of the wrapped trigger.
+ * Uses group-* selectors on the wrapper, so no client JS is needed.
  */
 export function Tooltip({ label, children, className = '' }: TooltipProps) {
   return (
