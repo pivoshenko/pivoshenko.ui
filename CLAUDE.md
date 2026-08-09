@@ -2,93 +2,102 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-## Repository Purpose
+## What This Is
 
-Single npm-style package consumed as a **git dependency** by the four `pivoshenko.*` Next.js sites. Nothing is published to npm; sites pin a git tag in `package.json`.
+`pivoshenko.ui` is the shared frontend package for the four `pivoshenko.*` Next.js sites (`pivoshenko.dev`, `pivoshenko.startpage`, `pivoshenko.wallpapers`, `pivoshenko.ai/site`). It ships Biome config, a TypeScript base, a PostCSS config, a Tailwind preset, design tokens, and React components.
 
-## Structure
-
-```
-pivoshenko.ui/
-  package.json              # name: "pivoshenko.ui"; single package, subpath exports
-  biome.json                # repo-level lint/format (self-linting)
-  justfile                  # install / format / lint / check / update / vendor-preset / release
-  config/
-    biome.json              # exported as 'pivoshenko.ui/biome.json'
-    tsconfig.base.json      # exported as 'pivoshenko.ui/tsconfig.base.json'
-  tailwind-preset/
-    preset.js               # vendored role-layer preset (flavor-agnostic; references CSS vars only)
-    index.js                # base preset; exported as 'pivoshenko.ui/tailwind-preset'
-    site.js                 # preset + JetBrains-Mono fontFamily + withUiContent helper; 'pivoshenko.ui/tailwind-preset/site'
-  postcss.config.mjs        # shared PostCSS config; 'pivoshenko.ui/postcss.config.mjs'
-  ui/
-    tokens.css              # CSS vars scoped to :root; the vendored palette IS the active palette
-    palette.ts              # same palette as raw hex; used by edge-runtime renderers: favicon (next/icon), OG image (next/opengraph-image), Next themeColor (CSS vars don't reach edge runtime)
-    globals.css             # @imports tokens.css; exposes role-based helper classes
-    src/index.ts            # React components; exported as 'pivoshenko.ui' (main)
-    next/
-      icon.tsx              # shared favicon ImageResponse; 'pivoshenko.ui/next/icon'
-      opengraph-image.tsx   # createOgImage({brand,title,subtitle,domain}); 'pivoshenko.ui/next/opengraph-image'
-      config.ts             # baseNextConfig; 'pivoshenko.ui/next/config'
-      site-layout.tsx       # <SiteLayout> + siteMetadata() + siteViewport; 'pivoshenko.ui/next/site-layout'
-```
-
-## Consumption
+**Nothing is published to npm.** Sites consume it as a git dependency pinned to a tag:
 
 ```jsonc
-// site's package.json
-"dependencies": {
-  "pivoshenko.ui": "github:pivoshenko/pivoshenko.ui#vX.Y.Z"
-}
+"dependencies": { "pivoshenko.ui": "github:pivoshenko/pivoshenko.ui#v0.9.4" }
 ```
 
-```ts
-// tailwind.config.ts
-import preset from 'pivoshenko.ui/tailwind-preset'
-```
-
-The preset is **flavor-agnostic**: it references CSS variables (`rgb(var(--bg-canvas) / <alpha-value>)` etc.) emitted by `ui/tokens.css`, which is `@import`ed from `pivoshenko.ui/globals.css`. The vendored tokens.css scopes its `--*` definitions to `:root`, so whichever flavor was vendored is the active one, and consumers need no `data-flavor` attribute. To switch flavor, re-run `just vendor-preset <flavor>` and update `ui/palette.ts` to match. Sites don't change at all.
-
-```json
-// biome.json: must use a relative path, Biome 1.x doesn't resolve npm-style names
-{ "extends": ["./node_modules/pivoshenko.ui/config/biome.json"] }
-```
-
-```json
-// tsconfig.json
-{ "extends": "pivoshenko.ui/tsconfig.base.json" }
-```
+**Nothing is built here.** `ui/src/*.tsx` ships as source TypeScript; the consuming site transpiles it (`transpilePackages: ['pivoshenko.ui']`, already set in `baseNextConfig`). There is no `tsconfig.json` in this repo and no typecheck gate — the only gate is Biome.
 
 ## Commands
 
 ```bash
-just install        # pnpm install
-just format         # biome write
-just lint           # biome check
-just check          # full gate (alias for lint, no build step)
-just update         # pnpm update -r
-just audit          # pnpm audit (gate against transitive CVEs)
-just vendor-preset  # copy fresh Tailwind preset from sibling pivoshenko.theme
-just release vX.Y.Z # local fallback; prefer the GitHub Actions release workflow
+just install         # pnpm install
+just lint            # biome check .        (CI gate)
+just format          # biome check --write .
+just check           # alias for lint; there is no build step
+just audit           # pnpm audit           (CI gate, blocks on transitive CVEs)
+just test            # no-op while .no-tests sentinel exists (CI gate)
+just update          # pnpm update -r
+just vendor-preset [flavor]   # re-vendor tokens + preset from ../pivoshenko.theme (default: popil)
+just release vX.Y.Z  # local fallback; prefer the release workflow (this one skips lint)
 ```
 
-## Stack
+CI (`.github/workflows/ci.yaml`) runs `just install → lint → audit → test` on Node 22. Releases go through `.github/workflows/release.yml` (`workflow_dispatch` with a `vX.Y.Z` input): it validates the tag format, refuses an existing tag, runs `pnpm lint`, pushes the tag, and creates a GitHub Release with generated notes.
 
-- Single-package repo (NO pnpm workspace, because that pattern doesn't work for git-dep monorepos: pnpm symlinks the whole repo as one package). `pnpm-workspace.yaml` exists only to hold pnpm-10 settings (`ignoredBuiltDependencies`, `overrides`); it does NOT declare a `packages:` workspace.
-- Biome 1.9.4. Self-lints via root `biome.json`.
-- Node `>=22`.
+## Export Surface
 
-## Key Conventions
+Every consumer entry point is a subpath in `package.json#exports`. Adding a new shared artifact means adding an export there **and** making sure its directory is listed in `files`.
 
-- One package, one version. When anything ships, bump the `package.json` version and cut a new tag.
-- Tags are immutable. Never force-push. Cut a new tag for every meaningful change.
-- Releases go through `.github/workflows/release.yml` (manual `workflow_dispatch`). It validates the version format, ensures the tag is fresh, runs lint, pushes the tag, and creates a GitHub Release with auto-generated notes. `just release` is the local fallback and skips lint.
-- The Tailwind preset and tokens are vendored. `tailwind-preset/preset.js` (role layer, flavor-agnostic), `ui/tokens.css` (CSS vars at `:root`), and `ui/palette.ts` (same values as raw hex for off-DOM rendering) are the source-of-truth artifacts consumers see. To refresh: `cd ../pivoshenko.theme && just render`, then `just vendor-preset [flavor]` here (defaults to `popil`). Then update `ui/palette.ts` to match, bump version, tag.
-- React components export source TS, not built JS. Consuming sites build them via Next's transpilation. Add `pivoshenko.ui` to a site's `transpilePackages` in `next.config.ts` once components ship.
-- React, Next, `@vercel/analytics`, and Tailwind are optional peer deps, so sites bring their own versions and config-only consumers don't trip on missing React. The one runtime dependency is `lucide-react` (icons used by `inputs`/`footer`/`scroll-to-top`), pulled transitively into sites with no consumer install needed.
-- Transitive CVE overrides live in `pnpm-workspace.yaml` under `overrides:` (pnpm 10 moved them out of `package.json`). Current pin: `postcss@<8.5.10 -> >=8.5.10` to patch GHSA-qx2v-qp2m-jg93 leaking via `next`'s bundled postcss. Re-evaluate (and drop) when the bundled version moves past the floor.
+| Subpath | File |
+| --- | --- |
+| `pivoshenko.ui` | `ui/src/index.ts` (React components) |
+| `pivoshenko.ui/biome.json` | `config/biome.json` |
+| `pivoshenko.ui/tsconfig.base.json` | `config/tsconfig.base.json` |
+| `pivoshenko.ui/postcss.config.mjs` | `postcss.config.mjs` |
+| `pivoshenko.ui/tailwind-preset` | `tailwind-preset/index.js` |
+| `pivoshenko.ui/tailwind-preset/site` | `tailwind-preset/site.js` |
+| `pivoshenko.ui/globals.css` | `ui/globals.css` |
+| `pivoshenko.ui/next/site-layout` | `SiteLayout`, `siteMetadata()`, `siteViewport` |
+| `pivoshenko.ui/next/config` | `baseNextConfig` |
+| `pivoshenko.ui/next/icon` | favicon `ImageResponse` |
+| `pivoshenko.ui/next/opengraph-image` | `createOgImage({brand,title,subtitle,domain})` |
 
-## When Editing the Repo
+Biome 1.x does not resolve npm-style names in `extends`, so sites must use the relative path: `{ "extends": ["./node_modules/pivoshenko.ui/config/biome.json"] }`.
 
-- Bump `package.json` version when shipping a change. Match the git tag exactly (no `v` prefix in `package.json`, `v` prefix in the tag).
-- When new shared artifacts land, bump the `pivoshenko.ui` tag in all four consumer sites.
+## Theming Architecture
+
+Three files carry the palette and **must move together**:
+
+- `ui/tokens.css` — CSS vars at `:root` as space-separated `R G B` triples. Vendored.
+- `tailwind-preset/preset.js` — maps those vars to Tailwind colors via `rgb(var(--token) / <alpha-value>)`. Vendored; excluded from Biome via root `biome.json` ignore list.
+- `ui/palette.ts` — the same values as raw hex, hand-maintained. Needed because CSS vars don't reach the edge runtime: the favicon, the OG image, and Next's `themeColor` all read from it.
+
+The preset is deliberately **flavor-agnostic** — it only references variable names, so its output is identical for every palette. Because `tokens.css` scopes to `:root` (the justfile rewrites the upstream `[data-flavor="<flavor>"]` selector), the vendored flavor *is* the active flavor and consumers need no `data-flavor` attribute.
+
+To switch or refresh a flavor:
+
+1. `cd ../pivoshenko.theme && just render`
+2. `just vendor-preset [flavor]` here
+3. update `ui/palette.ts` by hand to match the new `ui/tokens.css`
+4. bump version, tag
+
+Sites require no changes for a palette swap.
+
+`tailwind-preset/index.js` and `site.js` both inject an absolute content glob at `<pkgRoot>/ui/src/**/*.{ts,tsx}` — without it Tailwind prunes every class used inside these components. `site.js` additionally layers the JetBrains-Mono `fontFamily` (fed by `--font-jetbrains-mono`, which `SiteLayout` sets via `next/font`) and exports `withUiContent(siteGlobs)` so sites can append their own globs.
+
+## Component Conventions
+
+`ui/src/` components follow a consistent shape; match it when adding one:
+
+- Props type is a local `type XProps = HTMLAttributes<T> & { ... }`, destructured with `className = ''` and `...rest`, and `className` is appended last so callers can override.
+- Styling uses the role-based helper classes from `ui/globals.css` (`fg-primary`, `fg-muted`, `hover-secondary`, `border-ui`, `border-faint`, `type-label`, `type-meta`, ...) plus preset color scales (`bg-bg-surface`, `text-accent-primary`). Do not hardcode hex.
+- Server components by default. Only `nav.tsx` and `scroll-to-top.tsx` carry `'use client'` — keep it that way unless a component genuinely needs hooks or `usePathname`.
+- Every export must be re-exported from `ui/src/index.ts` (alphabetized, types exported inline as `type X`).
+
+`PageShell` composes `Nav` + `main` + `Footer` + `ScrollToTop`; `SiteLayout` wraps `PageShell` with `<html>`/`<body>`, the JetBrains-Mono font variable, and `<Analytics />`.
+
+## Dependencies
+
+- Single package, **no pnpm workspace**. `pnpm-workspace.yaml` exists only to hold pnpm-10 settings (`ignoredBuiltDependencies`, `overrides`) — it intentionally declares no `packages:`, because pnpm symlinks the whole repo as one package for git deps.
+- `react`, `react-dom`, `next`, `tailwindcss`, `@vercel/analytics` are **optional** peer deps, so config-only consumers don't trip on missing React.
+- `lucide-react` is the one real runtime dependency (icons in `footer`, `inputs`, `scroll-to-top`).
+- Transitive CVE overrides live in `pnpm-workspace.yaml` under `overrides:` (pnpm 10 moved them out of `package.json`). Current pins: `postcss@<8.5.10 → >=8.5.10` and `sharp@<0.35.0 → >=0.35.0`. Drop them once the bundled versions clear the floor.
+
+## Release Discipline
+
+- One package, one version. Every shipped change bumps `package.json#version` and cuts a tag.
+- `package.json` has no `v` prefix; the git tag does (`0.9.4` ↔ `v0.9.4`).
+- Tags are immutable — never force-push a tag; cut a new one.
+- After tagging, bump the `pivoshenko.ui` ref in all four consumer sites.
+
+For local iteration against a site without tagging, use a non-committed override in the site's `package.json`:
+
+```jsonc
+"pnpm": { "overrides": { "pivoshenko.ui": "link:../pivoshenko.ui" } }
+```
