@@ -3,7 +3,7 @@
 // for contexts CSS variables don't reach, such as edge-runtime OG images
 // (rendered to PNG via @vercel/og) and the Next `themeColor` meta tag.
 //
-// Regenerate alongside `ui/tokens.css` via `just vendor-preset`. The two files
+// Regenerate alongside `ui/tokens.css` via `just vendor-theme-preset`. The two files
 // are paired: swap the vendored flavor and both must move together, or off-DOM
 // rendering drifts from the in-DOM look
 export const palette = {

@@ -6,7 +6,7 @@
  * output of this preset is identical for every palette; only the
  * variable values change.
  *
- * Vendored from pivoshenko.theme via `just vendor-preset [flavor]`.
+ * Vendored from pivoshenko.theme via `just vendor-theme-preset [flavor]`.
  */
 const withAlpha = (token) => `rgb(var(--${token}) / <alpha-value>)`
 
