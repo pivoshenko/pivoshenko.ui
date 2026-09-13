@@ -20,17 +20,17 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 just install         # pnpm install
 just lint            # biome check .        (CI gate)
 just format          # biome check --write .
-just check           # alias for lint; there is no build step
-just audit           # pnpm audit           (CI gate, blocks on transitive CVEs)
+just check           # lint + test; there is no build step
 just test            # no-op while the .no-tests sentinel file exists (CI gate)
 just update          # pnpm update -r
-just vendor-preset [flavor]   # re-vendor tokens + preset from ../pivoshenko.theme (default: popil)
-just release vX.Y.Z  # local fallback (git tag + push --tags); prefer the release workflow
+just vendor-theme-preset [flavor]   # re-vendor tokens + preset from ../pivoshenko.theme (default: popil)
+just generate-changelog  # git-cliff --output CHANGELOG.md
+just tag-release vX.Y.Z  # local fallback (git tag + push --tags); prefer the release workflow
 ```
 
 There are no tests and no test runner — `just test` passes only because the `.no-tests` sentinel exists. Delete that file only when adding a real test command.
 
-CI (`.github/workflows/ci.yaml`) runs `just install → lint → audit → test` on Node 22 with pnpm. Releases go through `.github/workflows/release.yml` (`workflow_dispatch` with a `vX.Y.Z` input): it validates the tag format, refuses an existing tag, runs `pnpm lint`, pushes the tag, and creates a GitHub Release with generated notes.
+CI (`.github/workflows/ci.yaml`) runs `just install → lint → test` on Node 22 with pnpm. Releases go through `.github/workflows/release.yml` (`workflow_dispatch`), matching the git-cliff pattern the other repos use. The `version` input is optional — leave it empty and git-cliff derives the bump from the conventional commits since the last tag. The `tag` job lints, writes the version into `package.json`, regenerates `CHANGELOG.md`, then commits `release: vX.Y.Z` and pushes the tag; the `release` job creates the GitHub Release with `git-cliff --latest` as the body. There is no publish job — consumers pin the git tag directly (`github:pivoshenko/pivoshenko.ui#vX.Y.Z`).
 
 ## Export Surface
 
@@ -65,7 +65,7 @@ The preset is deliberately **flavor-agnostic** — it only references variable n
 To switch or refresh a flavor:
 
 1. render the theme upstream in `../pivoshenko.theme` (its dist outputs feed the vendor step)
-2. `just vendor-preset [flavor]` here
+2. `just vendor-theme-preset [flavor]` here
 3. update `ui/palette.ts` by hand to match the new `ui/tokens.css`
 4. bump version, tag
 
