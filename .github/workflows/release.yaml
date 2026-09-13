@@ -10,14 +10,18 @@ on:
 permissions:
   contents: write
 
+concurrency:
+  group: release
+  cancel-in-progress: false
+
 jobs:
   tag:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04-arm
     outputs:
       tag: v${{ steps.version.outputs.version }}
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
@@ -29,19 +33,19 @@ jobs:
       - name: Add git-cliff to PATH
         run: echo "$RUNNER_TEMP/git-cliff/bin" >> "$GITHUB_PATH"
 
-      - name: Setup pnpm
+      - name: Install pnpm
         uses: pnpm/action-setup@v6
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v6
+      - name: Setup Node
+        uses: actions/setup-node@v7
         with:
-          node-version: 22
+          node-version: 24
           cache: pnpm
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Lint
+      - name: Run linters
         run: pnpm lint
 
       - name: Resolve version
@@ -55,6 +59,7 @@ jobs:
             VERSION="${VERSION#v}"
           fi
           echo "version=${VERSION}" >> "$GITHUB_OUTPUT"
+          echo "resolved version: ${VERSION}"
 
       - name: Update version
         run: pnpm version "${{ steps.version.outputs.version }}" --no-git-tag-version --allow-same-version
@@ -78,22 +83,22 @@ jobs:
 
   release:
     needs: tag
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04-arm
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           ref: ${{ needs.tag.outputs.tag }}
           fetch-depth: 0
 
-      - name: Generate Changelog
+      - name: Generate changelog
         uses: orhun/git-cliff-action@v4
         id: changelog
         with:
           args: --latest --strip header
 
       - name: Create GitHub Release
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v3
         with:
           tag_name: ${{ needs.tag.outputs.tag }}
           body: ${{ steps.changelog.outputs.content }}
