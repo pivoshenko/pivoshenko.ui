@@ -10,10 +10,13 @@ format:
 lint:
     pnpm lint
 
+typecheck:
+    ./node_modules/.bin/tsc --noEmit
+
 test:
     @[ -f .no-tests ] && echo "skipping (.no-tests sentinel)" || { echo "no test command, add tests or restore .no-tests" >&2; exit 1; }
 
-check: lint test
+check: lint typecheck test
 
 update:
     pnpm update -r

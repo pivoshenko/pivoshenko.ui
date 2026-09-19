@@ -8,21 +8,15 @@
 
 - **Never published to npm.** Sites consume it as a git dependency pinned by tag, so a change here is not live until it is tagged **and** each site's `package.json` git ref is bumped
 - **No build step.** The `.` export points at `./ui/src/index.ts` - raw TSX, compiled by the consuming site, which is why `baseNextConfig` sets `transpilePackages: ['pivoshenko.ui']`. Do not add a bundler, a `dist/`, or emit-producing `tsc`; `config/tsconfig.base.json` sets `noEmit: true` deliberately
-- **No typecheck and no tests.** `just lint` is Biome only - formatting plus lint rules, not type checking. A type error in `ui/**` is caught nowhere in this repository; it surfaces when a consuming site builds
+- **No tests.** `just lint` is Biome only; `just typecheck` is the TypeScript pass, and `just check` runs both. Neither runs in CI, so a type error still surfaces first in a consuming site's build
 - do not delete `.no-tests` without adding a real test command - `just test` fails hard when the sentinel is gone
 - do not add runtime dependencies. `lucide-react` is the only one; anything framework-level goes in `peerDependencies` plus `peerDependenciesMeta.<dep>.optional`, because a consumer pulling only `tsconfig.base.json` must not be forced to install React
 
 ### Verifying a Change
 
-No tsconfig here includes `ui/**` (`tsc -p config/tsconfig.base.json` fails with TS18003), so a type check is a one-off invocation:
+`tsconfig.json` at the root includes `ui/**`, which is what an editor's language server picks up - without it TypeScript falls back to its defaults and every `.tsx` reports "Cannot use JSX unless the --jsx flag is provided". `just typecheck` runs the same config, and `just check` runs it after Biome.
 
-```bash
-./node_modules/.bin/tsc --noEmit --strict --jsx react-jsx --module esnext \
-  --moduleResolution bundler --target ES2022 --lib dom,dom.iterable,esnext \
-  --esModuleInterop --skipLibCheck ui/src/index.ts
-```
-
-The authoritative check is still a consuming site's build: add the `pnpm.overrides` link to the *site's* `package.json` (README, "Local Development Override" - do not commit it) and run `just build` there.
+That is still not CI: the authoritative check is a consuming site's build. Add the `pnpm.overrides` link to the *site's* `package.json` (README, "Local Development Override" - do not commit it) and run `just build` there.
 
 ## Generated Files
 
