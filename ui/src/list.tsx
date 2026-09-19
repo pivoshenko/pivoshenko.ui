@@ -48,7 +48,9 @@ export function Row({
   className = '',
   ...rest
 }: RowProps) {
-  const classes = `group relative grid grid-cols-[1fr] sm:grid-cols-[var(--lead,88px)_1fr_auto] items-baseline gap-0.5 sm:gap-4 p-3 border-b border-faint fg-primary no-underline transition-colors duration-fast focus-ring ${
+  const actionable = !isStatic && (href != null || rest.onClick != null)
+
+  const classes = `group relative grid w-full grid-cols-[1fr] sm:grid-cols-[var(--lead,88px)_1fr_auto] items-baseline gap-0.5 sm:gap-4 p-3 border-b border-faint fg-primary text-left no-underline transition-colors duration-fast focus-ring ${
     isStatic ? '' : 'hover:bg-bg-surface'
   } ${className}`
 
@@ -60,14 +62,18 @@ export function Row({
           isStatic ? '' : 'group-hover:top-[20%] group-hover:h-[60%]'
         }`}
       />
-      {lead != null && <span className="type-meta fg-subtle">{lead}</span>}
+      {/* self-center rather than the row's baseline: a lead is as often a
+          glyph as it is text, and a glyph on a text baseline rides high */}
+      {lead != null && (
+        <span className="type-meta fg-subtle self-center">{lead}</span>
+      )}
       <span className="grid gap-0.5 min-w-0">
         <span className="type-ui font-semibold">{title}</span>
         {desc && <span className="fg-body text-[13px] leading-5">{desc}</span>}
       </span>
       <span className="inline-flex items-center gap-2 whitespace-nowrap type-meta fg-subtle">
         {trail}
-        {href && !isStatic && (
+        {actionable && (
           <ArrowRight
             size={14}
             strokeWidth={2}
@@ -79,17 +85,33 @@ export function Row({
     </>
   )
 
-  return (
-    <li>
-      {href ? (
+  if (href) {
+    return (
+      <li>
         <a {...rest} href={href} className={classes}>
           {body}
         </a>
-      ) : (
-        <div {...rest} className={classes}>
+      </li>
+    )
+  }
+
+  // a row that does something is a button, so it is keyboard reachable and
+  // announced as actionable - the same rule Card follows
+  if (rest.onClick) {
+    return (
+      <li>
+        <button type="button" {...rest} className={classes}>
           {body}
-        </div>
-      )}
+        </button>
+      </li>
+    )
+  }
+
+  return (
+    <li>
+      <div {...rest} className={classes}>
+        {body}
+      </div>
     </li>
   )
 }
