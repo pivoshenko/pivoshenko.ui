@@ -1,23 +1,29 @@
 const path = require('node:path')
-const preset = require('./preset.js')
+const system = require('./system.js')
 
-// Site-flavored preset: role layer plus the JetBrains-Mono fontFamily override
-// every site needs. next/font writes the actual font into the
-// --font-jetbrains-mono CSS var from app/layout.tsx
+// Site-flavored preset: the design system plus the two font overrides every
+// site needs. next/font writes the actual faces into --font-jetbrains-mono and
+// --font-martian-mono from app/layout.tsx, via SiteLayout
 const pkgRoot = path.resolve(__dirname, '..')
 
 const fontFamily = {
   sans: ['var(--font-jetbrains-mono)', 'ui-monospace', 'SFMono-Regular'],
   mono: ['var(--font-jetbrains-mono)', 'ui-monospace', 'SFMono-Regular'],
+  display: [
+    'var(--font-martian-mono)',
+    'var(--font-jetbrains-mono)',
+    'ui-monospace',
+    'SFMono-Regular',
+  ],
 }
 
 module.exports = {
-  ...preset,
+  ...system,
   content: [`${pkgRoot}/ui/src/**/*.{ts,tsx}`],
   theme: {
-    ...preset.theme,
+    ...system.theme,
     extend: {
-      ...preset.theme?.extend,
+      ...system.theme.extend,
       fontFamily,
     },
   },

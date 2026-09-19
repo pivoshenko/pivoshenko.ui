@@ -4,10 +4,48 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    scroll-behavior: smooth;
+    /* the viewport reads the background off the root, and the crust keeps any
+       elastic overscroll the colour of the footer rather than a lighter band */
+    background-color: rgb(var(--crust));
+    overscroll-behavior-y: none;
+  }
+
+  body {
+    @apply bg-bg-canvas text-fg-default font-mono text-sm leading-relaxed antialiased;
+    font-variant-numeric: tabular-nums;
+  }
+
+  [id] {
+    scroll-margin-top: 5rem;
+  }
+
+  /* Links read as accent-info, not as the site accent - the accent marks the
+     page's own furniture, and a link that shares it stops looking clickable */
+  a:not([class]) {
+    @apply text-fg-default underline decoration-accent-info underline-offset-[3px] hover:text-accent-info;
+  }
+
+  ::selection {
+    background-color: rgb(var(--accent) / 0.28);
+  }
+}
+
 @layer components {
   /* == Typography == */
+
+  /* Martian Mono, reserved for numbers and titles that should read as a mark */
+  .type-display {
+    @apply font-display font-semibold tracking-tight;
+    font-variant-numeric: tabular-nums;
+  }
+
   .type-heading {
-    @apply text-base font-semibold;
+    @apply text-base leading-6 font-semibold;
   }
 
   .type-body {
@@ -15,22 +53,24 @@
   }
 
   .type-ui {
-    @apply text-sm;
+    @apply text-sm leading-5;
   }
 
   .type-label {
-    @apply text-xs font-mono uppercase tracking-widest;
+    @apply text-xs leading-4 font-mono uppercase tracking-widest;
   }
 
   .type-meta {
-    @apply text-xs font-mono;
+    @apply text-xs leading-4 font-mono;
+    font-variant-numeric: tabular-nums;
   }
 
   .type-logo {
-    @apply text-sm font-semibold font-mono tracking-tight;
+    @apply text-sm leading-5 font-semibold font-mono tracking-tight;
   }
 
   /* == Foreground Colors (Role-Mapped) == */
+
   .fg-primary {
     @apply text-fg-default;
   }
@@ -56,6 +96,7 @@
   }
 
   /* == Hover Foreground == */
+
   .hover-primary {
     @apply hover:text-fg-default;
   }
@@ -65,6 +106,7 @@
   }
 
   /* == Backgrounds == */
+
   .bg-tag {
     @apply bg-bg-raised;
   }
@@ -74,6 +116,7 @@
   }
 
   /* == Borders == */
+
   .border-ui {
     @apply border-border-default;
   }
@@ -82,38 +125,68 @@
     @apply border-border-subtle;
   }
 
+  /* A card's edge sits between border-default and border-strong, and needs the
+     translucency to survive over both bg-surface and bg-sunken */
+  .border-card {
+    border-color: rgb(var(--overlay0) / 0.6);
+  }
+
   /* == Underline Decoration == */
+
   .deco-subtle {
     @apply decoration-fg-faint;
   }
-}
 
-@layer base {
-  html {
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    scroll-behavior: smooth;
+  /* == Surfaces == */
+
+  .surface-card {
+    @apply border border-card rounded-lg bg-bg-surface shadow-rest;
   }
 
-  [id] {
-    scroll-margin-top: 4rem;
+  .surface-sunken {
+    @apply border border-card rounded-lg bg-crust shadow-rest;
   }
 
-  body {
-    @apply bg-bg-canvas text-fg-default font-mono antialiased;
+  /* == Focus == */
+
+  .focus-ring {
+    @apply focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent;
   }
 
-  a:not([class]) {
-    @apply text-accent-primary underline decoration-accent-primary/40 underline-offset-2 hover:decoration-accent-primary transition-colors;
+  /* == Patterns Tailwind Cannot Express == */
+
+  /* The dashed spine trailing a section heading and a column head */
+  .rule-dashed {
+    background-image: repeating-linear-gradient(
+      90deg,
+      rgb(var(--border-strong)) 0 4px,
+      transparent 4px 8px
+    );
   }
 
-  ::selection {
-    background-color: rgb(var(--bg-overlay));
+  /* The native dialog's backdrop is the one box a utility cannot reach */
+  .dialog-panel::backdrop {
+    background: var(--scrim);
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
   }
 
-  * {
-    transition-property: color, background-color, border-color;
-    transition-duration: 150ms;
-    transition-timing-function: ease;
+  /* Contour field masks, so the topography fades instead of ending on a seam */
+  .mask-radial {
+    -webkit-mask-image: radial-gradient(
+      ellipse 70% 80% at 70% 40%,
+      #000 30%,
+      transparent 78%
+    );
+    mask-image: radial-gradient(
+      ellipse 70% 80% at 70% 40%,
+      #000 30%,
+      transparent 78%
+    );
+  }
+
+  .mask-bottom {
+    -webkit-mask-image: linear-gradient(#000 40%, transparent);
+    mask-image: linear-gradient(#000 40%, transparent);
   }
 }

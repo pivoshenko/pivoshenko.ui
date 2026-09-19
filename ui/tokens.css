@@ -1,14 +1,42 @@
-/* Semantic design tokens (role layer).
+/* Semantic design tokens (role layer) plus the named palette behind it.
  * Values are space-separated R G B triples for use with
  * rgb(var(--token) / <alpha-value>) in Tailwind / shadcn-style configs.
  * Scoped to `:root`, so the vendored palette IS the active palette.
  * Regenerate via `just vendor-theme-preset` in pivoshenko.ui.
  */
 :root {
+  /* Palette */
+  --rosewater: 221 199 194;
+  --flamingo: 227 129 145;
+  --pink: 206 157 185;
+  --mauve: 173 140 192;
+  --red: 236 116 112;
+  --maroon: 217 157 143;
+  --peach: 228 141 102;
+  --yellow: 212 170 92;
+  --green: 145 171 120;
+  --teal: 112 178 165;
+  --sky: 108 183 192;
+  --sapphire: 91 167 197;
+  --blue: 141 167 209;
+  --lavender: 184 185 215;
+  --text: 228 226 222;
+  --subtext1: 184 179 168;
+  --subtext0: 155 149 138;
+  --overlay2: 168 162 158;
+  --overlay1: 120 113 108;
+  --overlay0: 87 83 78;
+  --surface2: 61 61 60;
+  --surface1: 50 50 49;
+  --surface0: 41 41 40;
+  --base: 31 31 30;
+  --mantle: 26 26 25;
+  --crust: 21 21 20;
+
   /* Background */
   --bg-canvas: 31 31 30;
-  --bg-surface: 38 38 37;
-  --bg-raised: 46 46 44;
+  --bg-surface: 41 41 40;
+  --bg-raised: 50 50 49;
   --bg-sunken: 26 26 25;
   --bg-overlay: 87 83 78;
 
@@ -19,15 +47,80 @@
   --fg-faint: 120 113 108;
 
   /* Border */
-  --border-subtle: 38 38 37;
-  --border-default: 46 46 44;
-  --border-strong: 55 54 52;
+  --border-subtle: 41 41 40;
+  --border-default: 50 50 49;
+  --border-strong: 61 61 60;
 
   /* Accent */
-  --accent-primary: 217 119 87;
-  --accent-secondary: 212 168 90;
-  --accent-success: 138 157 104;
-  --accent-warning: 212 168 90;
-  --accent-danger: 200 122 114;
-  --accent-info: 123 160 196;
+  --accent-primary: 141 167 209;
+  --accent-secondary: 184 185 215;
+  --accent-success: 145 171 120;
+  --accent-warning: 212 170 92;
+  --accent-danger: 236 116 112;
+  --accent-info: 91 167 197;
+
+  /* Active accent. Any subtree can retarget it with data-accent */
+  --accent: var(--accent-primary);
+
+  /* Readable foreground on an accent fill */
+  --on-accent: 31 31 30;
+
+  /* Translucent, so it cannot be a triple Tailwind composes an alpha onto */
+  --scrim: rgb(21 21 20 / 0.72);
+}
+
+[data-accent="rosewater"] {
+  --accent: var(--rosewater);
+}
+
+[data-accent="flamingo"] {
+  --accent: var(--flamingo);
+}
+
+[data-accent="pink"] {
+  --accent: var(--pink);
+}
+
+[data-accent="mauve"] {
+  --accent: var(--mauve);
+}
+
+[data-accent="red"] {
+  --accent: var(--red);
+}
+
+[data-accent="maroon"] {
+  --accent: var(--maroon);
+}
+
+[data-accent="peach"] {
+  --accent: var(--peach);
+}
+
+[data-accent="yellow"] {
+  --accent: var(--yellow);
+}
+
+[data-accent="green"] {
+  --accent: var(--green);
+}
+
+[data-accent="teal"] {
+  --accent: var(--teal);
+}
+
+[data-accent="sky"] {
+  --accent: var(--sky);
+}
+
+[data-accent="sapphire"] {
+  --accent: var(--sapphire);
+}
+
+[data-accent="blue"] {
+  --accent: var(--blue);
+}
+
+[data-accent="lavender"] {
+  --accent: var(--lavender);
 }
