@@ -3,6 +3,7 @@ import type { Metadata, Viewport } from 'next'
 import { JetBrains_Mono, Martian_Mono } from 'next/font/google'
 import type { ReactNode } from 'react'
 import { type AccentName, palette } from '../palette'
+import type { FieldKind } from '../src/field'
 import type { FooterLink } from '../src/footer'
 import type { NavLink } from '../src/nav'
 import { PageShell } from '../src/page-shell'
@@ -69,6 +70,12 @@ type SiteLayoutProps = {
   footerExtras?: FooterLink[]
   /** Named palette slot every `accent` utility resolves to, site-wide */
   accent?: AccentName
+  /** Decorative field the hero and footer bands paint, site-wide */
+  field?: FieldKind
+  /** Palette slot the field's lit cells take; defaults to the site accent */
+  fieldTint?: AccentName
+  /** Drop the footer's field on a site that wants the band plain */
+  footerPattern?: boolean
   beforeShell?: ReactNode
   afterShell?: ReactNode
   children: ReactNode
@@ -79,6 +86,9 @@ export function SiteLayout({
   navLinks,
   footerExtras,
   accent = 'peach',
+  field,
+  fieldTint,
+  footerPattern,
   beforeShell,
   afterShell,
   children,
@@ -96,6 +106,9 @@ export function SiteLayout({
           brand={brand}
           navLinks={navLinks}
           footerExtras={footerExtras}
+          field={field}
+          tint={fieldTint}
+          footerPattern={footerPattern}
         >
           {children}
         </PageShell>

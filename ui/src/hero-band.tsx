@@ -1,4 +1,6 @@
 import type { ReactNode } from 'react'
+import type { AccentName } from '../palette'
+import type { FieldKind } from './field'
 import { Hero } from './hero'
 import { Stat, type StatTone, Stats } from './stat'
 
@@ -11,6 +13,8 @@ type HeroBandProps = {
   tone?: StatTone
   children?: ReactNode
   pattern?: boolean
+  field?: FieldKind
+  tint?: AccentName
   className?: string
 }
 
@@ -22,10 +26,12 @@ export function HeroBand({
   tone,
   children,
   pattern = true,
+  field,
+  tint,
   className = '',
 }: HeroBandProps) {
   return (
-    <Hero pattern={pattern} className={className}>
+    <Hero pattern={pattern} field={field} tint={tint} className={className}>
       {eyebrow && (
         <p className="type-label fg-subtle">
           <span aria-hidden="true" className="text-accent">

@@ -1,6 +1,7 @@
 import { Globe } from 'lucide-react'
 import type { ReactNode } from 'react'
-import { Contours } from './contours'
+import type { AccentName } from '../palette'
+import { Field, type FieldKind } from './field'
 
 export type FooterLink = {
   label: string
@@ -77,6 +78,8 @@ const baselineLinks: FooterLink[] = [
 type FooterProps = {
   extras?: FooterLink[]
   pattern?: boolean
+  field?: FieldKind
+  tint?: AccentName
   year?: number
   contact?: string
   className?: string
@@ -85,6 +88,8 @@ type FooterProps = {
 export function Footer({
   extras = [],
   pattern = true,
+  field = 'contours',
+  tint,
   year = new Date().getFullYear(),
   contact = 'contact@pivoshenko.dev',
   className = '',
@@ -96,14 +101,7 @@ export function Footer({
       className={`relative mt-16 w-full border-t border-border-strong bg-crust overflow-hidden isolate ${className}`}
     >
       {pattern ? (
-        <Contours
-          mask="radial"
-          levels={10}
-          cell={16}
-          speed={0.5}
-          opacity={0.55}
-          seed={7}
-        />
+        <Field kind={field} mask="radial" tint={tint} interactive={false} />
       ) : null}
       <div className="relative z-10 mx-auto flex h-14 max-w-6xl flex-wrap items-center justify-between gap-x-4 gap-y-2 px-4 type-meta fg-subtle sm:px-6">
         {/* the accent stub starts at the content edge rather than the viewport
