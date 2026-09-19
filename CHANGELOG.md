@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.12.1] - 2026-09-19
+
+### Bug fixes
+
+- **pixels**: Clear the field where a hero's copy sits
+
+### Miscellaneous
+
+- Reformat the package manifest after the release bump
+
 ## [0.12.0] - 2026-09-19
 
 ### Features
@@ -11,6 +21,10 @@ All notable changes to this project will be documented in this file.
 ### Miscellaneous
 
 - Reformat the package manifest after the release bump
+
+### Release
+
+- V0.12.0
 
 ## [0.11.1] - 2026-09-19
 
