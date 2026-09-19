@@ -2,11 +2,25 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.12.0] - 2026-09-19
+
+### Features
+
+- **field**: Add a pixel field and make the band field a site choice
+
+### Miscellaneous
+
+- Reformat the package manifest after the release bump
+
 ## [0.11.1] - 2026-09-19
 
 ### Bug fixes
 
 - **catalog**: Keep the own block when there is nothing external
+
+### Release
+
+- V0.11.1
 
 ## [0.11.0] - 2026-09-19
 
