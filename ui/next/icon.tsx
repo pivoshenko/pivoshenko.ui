@@ -1,5 +1,5 @@
 import { ImageResponse } from 'next/og'
-import { palette } from '../palette'
+import { type AccentName, palette } from '../palette'
 
 export const size = { width: 32, height: 32 }
 export const contentType = 'image/png'
@@ -8,7 +8,9 @@ export const runtime = 'edge' as const
 const JETBRAINS_MONO_URL =
   'https://fonts.gstatic.com/s/jetbrainsmono/v18/tDbY2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKxjPVmUsaaDhw.ttf'
 
-export default async function Icon() {
+export default async function Icon({
+  accent = 'peach',
+}: { accent?: AccentName } = {}) {
   const font = await fetch(new URL(JETBRAINS_MONO_URL)).then((res) =>
     res.arrayBuffer(),
   )
@@ -28,9 +30,22 @@ export default async function Icon() {
         lineHeight: 1,
         fontFamily: 'JetBrains Mono',
         borderRadius: 4,
+        position: 'relative',
       }}
     >
       VP
+      {/* the accent chip the Logo component pins to the mark's corner */}
+      <div
+        style={{
+          position: 'absolute',
+          right: 1,
+          bottom: 1,
+          width: 8,
+          height: 8,
+          borderRadius: 2,
+          background: palette.named[accent],
+        }}
+      />
     </div>,
     {
       ...size,

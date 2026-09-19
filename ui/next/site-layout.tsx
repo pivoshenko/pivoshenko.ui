@@ -1,8 +1,8 @@
 import { Analytics } from '@vercel/analytics/next'
 import type { Metadata, Viewport } from 'next'
-import { JetBrains_Mono } from 'next/font/google'
+import { JetBrains_Mono, Martian_Mono } from 'next/font/google'
 import type { ReactNode } from 'react'
-import { palette } from '../palette'
+import { type AccentName, palette } from '../palette'
 import type { FooterLink } from '../src/footer'
 import type { NavLink } from '../src/nav'
 import { PageShell } from '../src/page-shell'
@@ -55,10 +55,21 @@ const jetbrainsMono = JetBrains_Mono({
   variable: '--font-jetbrains-mono',
 })
 
+// Display face, reserved for headings and stat values. Only the weights the
+// design system actually sets, so the subset stays small
+const martianMono = Martian_Mono({
+  subsets: ['latin'],
+  weight: ['500', '600'],
+  variable: '--font-martian-mono',
+})
+
 type SiteLayoutProps = {
   brand: string
   navLinks?: NavLink[]
   footerExtras?: FooterLink[]
+  /** Named palette slot every `accent` utility resolves to, site-wide */
+  accent?: AccentName
+  hero?: ReactNode
   beforeShell?: ReactNode
   afterShell?: ReactNode
   children: ReactNode
@@ -68,6 +79,8 @@ export function SiteLayout({
   brand,
   navLinks,
   footerExtras,
+  accent = 'peach',
+  hero,
   beforeShell,
   afterShell,
   children,
@@ -76,7 +89,8 @@ export function SiteLayout({
     <html
       lang="en"
       data-scroll-behavior="smooth"
-      className={jetbrainsMono.variable}
+      data-accent={accent}
+      className={`${jetbrainsMono.variable} ${martianMono.variable}`}
     >
       <body className="font-mono antialiased">
         {beforeShell}
@@ -84,6 +98,7 @@ export function SiteLayout({
           brand={brand}
           navLinks={navLinks}
           footerExtras={footerExtras}
+          hero={hero}
         >
           {children}
         </PageShell>
