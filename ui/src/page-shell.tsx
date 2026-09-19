@@ -7,6 +7,8 @@ type PageShellProps = {
   brand: string
   navLinks?: NavLink[]
   footerExtras?: FooterLink[]
+  /** Full-bleed band between the header and the content well */
+  hero?: ReactNode
   children: ReactNode
 }
 
@@ -14,13 +16,17 @@ export function PageShell({
   brand,
   navLinks,
   footerExtras,
+  hero,
   children,
 }: PageShellProps) {
   return (
     <>
-      <div className="min-h-screen flex flex-col">
+      <div className="flex min-h-screen flex-col">
         <Nav brand={brand} links={navLinks} />
-        <main className="flex-1 w-full max-w-6xl mx-auto px-4 py-6">
+        {hero}
+        <main
+          className={`mx-auto w-full max-w-6xl flex-1 px-6 pb-10 ${hero ? 'pt-4' : 'pt-8'}`}
+        >
           {children}
         </main>
         <Footer extras={footerExtras} />

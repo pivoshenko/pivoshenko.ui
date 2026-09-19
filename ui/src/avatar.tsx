@@ -1,10 +1,6 @@
-type AvatarSize = 16 | 24 | 32 | 48 | 64
+import type { HTMLAttributes } from 'react'
 
-type AvatarProps = {
-  initials: string
-  size?: AvatarSize
-  className?: string
-}
+type AvatarSize = 16 | 24 | 32 | 48 | 64
 
 const sizeClass: Record<AvatarSize, string> = {
   16: 'w-4 h-4 text-[8px]',
@@ -14,11 +10,24 @@ const sizeClass: Record<AvatarSize, string> = {
   64: 'w-16 h-16 text-base',
 }
 
-export function Avatar({ initials, size = 32, className = '' }: AvatarProps) {
+type AvatarProps = HTMLAttributes<HTMLSpanElement> & {
+  initials: string
+  size?: AvatarSize
+  className?: string
+}
+
+export function Avatar({
+  initials,
+  size = 32,
+  className = '',
+  ...rest
+}: AvatarProps) {
   return (
     <span
+      role="img"
       aria-label={initials}
-      className={`inline-flex items-center justify-center bg-fg-default text-bg-canvas font-mono font-semibold tracking-tight ${sizeClass[size]} ${className}`}
+      {...rest}
+      className={`inline-grid place-items-center rounded-sm bg-fg-default text-bg-canvas font-mono font-extrabold tracking-[-0.04em] leading-none ${sizeClass[size]} ${className}`}
     >
       {initials.toUpperCase()}
     </span>

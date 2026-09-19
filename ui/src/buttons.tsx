@@ -1,4 +1,58 @@
-import type { ButtonHTMLAttributes, ReactNode } from 'react'
+import { ArrowRight } from 'lucide-react'
+import type {
+  AnchorHTMLAttributes,
+  ButtonHTMLAttributes,
+  ReactNode,
+} from 'react'
+
+// == Arrow Link ==
+
+type ArrowLinkVariant = 'text' | 'solid' | 'outline'
+
+const linkVariant: Record<ArrowLinkVariant, string> = {
+  text: 'fg-subtle hover-primary',
+  solid:
+    'px-4 py-2 rounded-md bg-fg-default text-bg-canvas font-semibold hover:bg-accent',
+  outline:
+    'px-4 py-[7px] rounded-md border border-border-strong bg-bg-canvas text-fg-default hover:border-accent',
+}
+
+// the solid pill has no room for a second colour, so its arrow takes the
+// button's own foreground instead of the accent
+const linkArrow: Record<ArrowLinkVariant, string> = {
+  text: 'text-accent',
+  solid: 'text-current',
+  outline: 'text-accent',
+}
+
+type ArrowLinkProps = AnchorHTMLAttributes<HTMLAnchorElement> & {
+  children: ReactNode
+  variant?: ArrowLinkVariant
+}
+
+export function ArrowLink({
+  children,
+  variant = 'text',
+  className = '',
+  ...rest
+}: ArrowLinkProps) {
+  return (
+    <a
+      {...rest}
+      className={`group inline-flex items-center gap-2 font-mono text-[13px] leading-5 no-underline transition-colors duration-fast focus-ring ${linkVariant[variant]} ${className}`}
+    >
+      <span>{children}</span>
+      <ArrowRight
+        size={14}
+        strokeWidth={2}
+        aria-hidden="true"
+        className={`shrink-0 transition-transform duration-base ease-out group-hover:translate-x-1 motion-reduce:transition-none ${linkArrow[variant]}`}
+      />
+    </a>
+  )
+}
+
+// == Buttons ==
 
 type IconButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
   active?: boolean
@@ -10,12 +64,14 @@ export function IconButton({
   children,
   ...rest
 }: IconButtonProps) {
-  const state = active ? 'fg-primary' : 'fg-muted hover-secondary'
+  const state = active
+    ? 'fg-primary border-accent'
+    : 'fg-subtle hover-primary hover:border-border-strong'
   return (
     <button
       type="button"
       {...rest}
-      className={`w-8 h-8 inline-flex items-center justify-center border border-ui rounded bg-bg-canvas ${state} disabled:opacity-40 transition-colors ${className}`}
+      className={`w-8 h-8 inline-flex items-center justify-center border border-card rounded-md bg-bg-sunken transition-colors duration-fast disabled:opacity-40 disabled:cursor-not-allowed focus-ring ${state} ${className}`}
     >
       {children}
     </button>
@@ -32,12 +88,14 @@ export function CopyPill({
   children,
   ...rest
 }: CopyPillProps) {
-  const tone = copied ? 'text-accent-primary' : 'fg-muted hover-secondary'
+  const tone = copied
+    ? 'text-accent border-accent'
+    : 'fg-subtle hover-primary hover:border-border-strong'
   return (
     <button
       type="button"
       {...rest}
-      className={`inline-flex items-center gap-1.5 border border-ui rounded px-2 py-1 font-mono text-xs ${tone} transition-colors ${className}`}
+      className={`inline-flex items-center gap-1.5 px-1.5 py-px border border-ui rounded-sm bg-transparent font-mono font-medium text-[11px] leading-4 transition-colors duration-fast focus-ring ${tone} ${className}`}
     >
       {children}
     </button>
@@ -57,7 +115,7 @@ export function TextButton({
     <button
       type="button"
       {...rest}
-      className={`font-mono text-sm bg-transparent border-0 p-0 fg-subtle hover-secondary transition-colors ${className}`}
+      className={`inline-flex items-center gap-2 p-0 border-0 bg-transparent font-mono text-[13px] leading-5 fg-subtle hover-primary transition-colors duration-fast disabled:opacity-40 focus-ring ${className}`}
     >
       {children}
     </button>

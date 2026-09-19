@@ -1,5 +1,6 @@
 import { Globe } from 'lucide-react'
 import type { ReactNode } from 'react'
+import { Contours } from './contours'
 
 export type FooterLink = {
   label: string
@@ -75,23 +76,53 @@ const baselineLinks: FooterLink[] = [
 
 type FooterProps = {
   extras?: FooterLink[]
+  pattern?: boolean
   year?: number
   contact?: string
+  className?: string
 }
 
 export function Footer({
   extras = [],
+  pattern = true,
   year = new Date().getFullYear(),
   contact = 'contact@pivoshenko.dev',
+  className = '',
 }: FooterProps = {}) {
   const links = [...baselineLinks, ...extras]
+
   return (
-    <footer className="w-full border-t border-ui">
-      <div className="max-w-6xl mx-auto px-4 h-14 flex items-center justify-between">
-        <span className="type-meta fg-muted">
-          {year} Volodymyr Pivoshenko &lt;{contact}&gt;
+    <footer
+      className={`relative mt-16 w-full border-t border-border-strong bg-crust overflow-hidden isolate ${className}`}
+    >
+      {pattern ? (
+        <Contours
+          mask="radial"
+          levels={10}
+          cell={16}
+          speed={0.5}
+          opacity={0.55}
+          seed={7}
+        />
+      ) : null}
+      <span
+        aria-hidden="true"
+        className="absolute left-0 -top-px z-10 h-[2px] w-24 bg-accent"
+      />
+
+      <div className="relative z-10 mx-auto flex h-14 max-w-6xl flex-wrap items-center justify-between gap-x-4 gap-y-2 px-4 type-meta fg-subtle sm:px-6">
+        <span>
+          {year} Volodymyr Pivoshenko &lt;
+          <a
+            href={`mailto:${contact}`}
+            className="fg-subtle hover-primary no-underline transition-colors duration-fast"
+          >
+            {contact}
+          </a>
+          &gt;
         </span>
-        <div className="flex items-center gap-4">
+
+        <nav aria-label="Elsewhere" className="flex items-center gap-4">
           {links.map((link) => (
             <a
               key={link.label}
@@ -101,13 +132,12 @@ export function Footer({
                 target: '_blank',
                 rel: 'noopener noreferrer',
               })}
-              className="fg-muted hover-secondary transition-colors"
+              className="fg-subtle hover-primary transition-colors duration-fast focus-ring"
             >
-              <span className="sr-only">{link.label}</span>
               {link.icon}
             </a>
           ))}
-        </div>
+        </nav>
       </div>
     </footer>
   )
