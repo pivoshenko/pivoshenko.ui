@@ -15,8 +15,12 @@ export const ogSize = { width: 1200, height: 630 }
 export const ogContentType = 'image/png'
 export const ogRuntime = 'edge' as const
 
+// static instances, not the variable file: Satori renders a variable font at
+// one weight, so a 700 declaration against it silently rendered regular
 const JETBRAINS_MONO_URL =
-  'https://fonts.gstatic.com/s/jetbrainsmono/v18/tDbY2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKxjPVmUsaaDhw.ttf'
+  'https://fonts.gstatic.com/s/jetbrainsmono/v24/tDbY2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKxjPQ.ttf'
+const JETBRAINS_MONO_BOLD_URL =
+  'https://fonts.gstatic.com/s/jetbrainsmono/v24/tDbY2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8L6tjPQ.ttf'
 
 function OgCard({
   brand,
@@ -75,14 +79,16 @@ function OgCard({
 
 export function createOgImage(props: OgImageProps) {
   return async function handler() {
-    const font = await fetch(new URL(JETBRAINS_MONO_URL)).then((res) =>
-      res.arrayBuffer(),
+    const [regular, bold] = await Promise.all(
+      [JETBRAINS_MONO_URL, JETBRAINS_MONO_BOLD_URL].map((url) =>
+        fetch(new URL(url)).then((res) => res.arrayBuffer()),
+      ),
     )
     return new ImageResponse(<OgCard {...props} />, {
       ...ogSize,
       fonts: [
-        { name: 'JetBrains Mono', data: font, weight: 700 },
-        { name: 'JetBrains Mono', data: font, weight: 400 },
+        { name: 'JetBrains Mono', data: bold, weight: 700 },
+        { name: 'JetBrains Mono', data: regular, weight: 400 },
       ],
     })
   }
