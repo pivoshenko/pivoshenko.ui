@@ -189,4 +189,15 @@
     -webkit-mask-image: linear-gradient(#000 40%, transparent);
     mask-image: linear-gradient(#000 40%, transparent);
   }
+
+  /* Clears the left third where a band's copy sits: a pixel field is opaque
+     cell by cell, so unlike a hairline contour it fights the text under it */
+  .mask-copy {
+    -webkit-mask-image: linear-gradient(to right, transparent 22%, #000 58%),
+      linear-gradient(#000 40%, transparent);
+    -webkit-mask-composite: source-in;
+    mask-image: linear-gradient(to right, transparent 22%, #000 58%),
+      linear-gradient(#000 40%, transparent);
+    mask-composite: intersect;
+  }
 }
