@@ -69,7 +69,6 @@ type SiteLayoutProps = {
   footerExtras?: FooterLink[]
   /** Named palette slot every `accent` utility resolves to, site-wide */
   accent?: AccentName
-  hero?: ReactNode
   beforeShell?: ReactNode
   afterShell?: ReactNode
   children: ReactNode
@@ -80,7 +79,6 @@ export function SiteLayout({
   navLinks,
   footerExtras,
   accent = 'peach',
-  hero,
   beforeShell,
   afterShell,
   children,
@@ -98,7 +96,6 @@ export function SiteLayout({
           brand={brand}
           navLinks={navLinks}
           footerExtras={footerExtras}
-          hero={hero}
         >
           {children}
         </PageShell>
