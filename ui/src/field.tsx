@@ -19,9 +19,11 @@ export function Field({ kind, mask, tint, interactive = true }: FieldProps) {
   const accentVar = tint ? `--${tint}` : undefined
 
   if (kind === 'pixels') {
+    // a hero's copy sits at the left, and opaque cells under it cost more
+    // legibility than a contour line does, so the field starts past the text
     return (
       <Pixels
-        mask={mask}
+        mask={mask === 'bottom' ? 'copy' : mask}
         accentVar={accentVar}
         cell={16}
         gap={3}

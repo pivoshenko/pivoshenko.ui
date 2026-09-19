@@ -57,12 +57,13 @@ function rgb(triple: string, alpha = 1): string {
 // == Variants ==
 
 type PixelsVariant = 'mosaic' | 'scan' | 'sparse'
-type PixelsMask = 'none' | 'radial' | 'bottom'
+type PixelsMask = 'none' | 'radial' | 'bottom' | 'copy'
 
 const maskClasses: Record<PixelsMask, string> = {
   none: '',
   radial: 'mask-radial',
   bottom: 'mask-bottom',
+  copy: 'mask-copy',
 }
 
 type PixelsProps = HTMLAttributes<HTMLDivElement> & {
