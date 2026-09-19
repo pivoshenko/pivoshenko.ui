@@ -57,10 +57,12 @@ export function Card({
     isStatic ? '' : interactive
   } ${className}`
 
+  // the eyebrow is block rather than flex: text-overflow never applies to a
+  // flex container's children, so an ellipsis there silently does nothing
   const body = (
     <>
       {eyebrow != null && (
-        <div className="relative -mx-6 -mt-6 mb-2 flex items-center gap-1.5 px-6 py-2 border-b border-faint bg-bg-sunken fg-subtle text-[11px] leading-4 whitespace-nowrap overflow-hidden text-ellipsis">
+        <div className="relative -mx-6 -mt-6 mb-2 block truncate border-b border-faint bg-bg-sunken px-6 py-2 fg-subtle text-[11px] leading-4">
           {splitEyebrow(eyebrow)}
         </div>
       )}
