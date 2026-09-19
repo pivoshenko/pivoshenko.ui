@@ -1,4 +1,6 @@
 import type { HTMLAttributes, ReactNode } from 'react'
+import type { AccentName } from '../palette'
+import type { FieldKind } from './field'
 import { Footer, type FooterLink } from './footer'
 import { Nav, type NavLink } from './nav'
 import { ScrollToTop } from './scroll-to-top'
@@ -7,6 +9,10 @@ type PageShellProps = {
   brand: string
   navLinks?: NavLink[]
   footerExtras?: FooterLink[]
+  field?: FieldKind
+  tint?: AccentName
+  /** Drop the footer's field on a site that wants the band plain */
+  footerPattern?: boolean
   children: ReactNode
 }
 
@@ -16,6 +22,9 @@ export function PageShell({
   brand,
   navLinks,
   footerExtras,
+  field,
+  tint,
+  footerPattern = true,
   children,
 }: PageShellProps) {
   return (
@@ -23,7 +32,12 @@ export function PageShell({
       <div className="flex min-h-screen flex-col">
         <Nav brand={brand} links={navLinks} />
         <main className="w-full flex-1">{children}</main>
-        <Footer extras={footerExtras} />
+        <Footer
+          extras={footerExtras}
+          field={field}
+          tint={tint}
+          pattern={footerPattern}
+        />
       </div>
       <ScrollToTop />
     </>
