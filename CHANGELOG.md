@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.12.3] - 2026-09-19
+
+### CI/CD
+
+- **release**: Format the manifest after the version bump
+
+### Design
+
+- **pixels**: Weight the field by side and let the footer answer the cursor
+
 ## [0.12.2] - 2026-09-19
 
 ### Design
@@ -11,6 +21,10 @@ All notable changes to this project will be documented in this file.
 ### Miscellaneous
 
 - Reformat the package manifest after the release bump
+
+### Release
+
+- V0.12.2
 
 ## [0.12.1] - 2026-09-19
 
