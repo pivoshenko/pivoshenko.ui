@@ -2,10 +2,33 @@
 
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [0.11.1] - 2026-09-19
+
+### Bug fixes
+
+- **catalog**: Keep the own block when there is nothing external
+
+## [0.11.0] - 2026-09-19
 
 ### Build
 
+- **tsconfig**: Add a root config so editors resolve ui sources
+
+### Features
+
+- **catalog**: Bucket entries by a group they name
+
+## [0.10.0] - 2026-09-19
+
+### Bug fixes
+
+- **flow-map**: Re-measure when the node set changes
+- **next**: Render the mark in a real extrabold face
+- **card**: Ellipsise an eyebrow that does not fit
+
+### Build
+
+- Update dependencies
 - Update dependencies
 - **deps**: Bump baseline-browser-mapping to 2.11.13
 
@@ -14,18 +37,45 @@ All notable changes to this project will be documented in this file.
 - Drop label sync in favor of terraform
 - **release**: Bump pnpm and node actions off the Node 20 runtime
 
+### Design
+
+- **list**: Let a row act as a button and centre its lead
+- **chrome**: Tie the accent stubs to the content edge
+- **next**: Add the display face and a per-site accent
+- **components**: Port the pivoshenko design system into react
+- **tokens**: Vendor the popil palette and the design-system scales
+
 ### Documentation
 
+- Describe the design system and its token vocabulary
+- Correct the vendor recipe name in generated headers
+- Rewrite CLAUDE.md from scratch
 - Regenerate CLAUDE.md and add AGENTS.md
 - Add pull request template
 - Regenerate CLAUDE.md
 - Drop references to the removed workspace root
 
+### Features
+
+- **catalog**: Offer a card layout alongside rows
+- **exports**: Publish the composite layer from the barrel
+- **list**: Let a row link through a caller's element
+- **bands**: Add the hero, highlight and feature page bands
+- **flow-map**: Add a column-and-link node graph
+- **catalog**: Add a filterable catalog to the shared package
+
 ### Miscellaneous
 
+- **release**: 0.10.0
+- Repository housekeeping
 - Symlink AGENTS.md to CLAUDE.md
 - Remove local pull request template
 - **deps**: Update locked dependencies
+
+### Refactor
+
+- **page-shell**: Give a page its own full-bleed bands
+- **justfile**: Standardize recipe names and ordering
 
 ## [0.9.4] - 2026-08-09
 

@@ -1,6 +1,6 @@
 {
   "name": "pivoshenko.ui",
-  "version": "0.11.0",
+  "version": "0.11.1",
   "description": "Shared frontend artifacts for the pivoshenko sites (Biome config, TS base, Tailwind preset, React components)",
   "license": "SEE LICENSE IN LICENSE",
   "author": "Volodymyr Pivoshenko",
@@ -12,7 +12,12 @@
   "engines": {
     "node": ">=22"
   },
-  "files": ["config", "tailwind-preset", "ui", "postcss.config.mjs"],
+  "files": [
+    "config",
+    "tailwind-preset",
+    "ui",
+    "postcss.config.mjs"
+  ],
   "exports": {
     "./package.json": "./package.json",
     "./biome.json": "./config/biome.json",
