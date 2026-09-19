@@ -29,6 +29,16 @@ const linkBase =
 // its heading has cleared the chrome rather than when it merely peeks in
 const SPY_LINE = 96
 
+// a nav entry can point at a section of another page ('/#plugins'), so the
+// route and the fragment are tracked separately: only the route we are actually
+// on gets spied, and only then can one of its sections be current
+function splitHash(href: string, pathname: string) {
+  if (href.startsWith('#')) return { path: pathname, hash: href.slice(1) }
+  const at = href.indexOf('#')
+  if (at === -1) return { path: href, hash: '' }
+  return { path: href.slice(0, at) || '/', hash: href.slice(at + 1) }
+}
+
 function Underline() {
   return (
     <span
@@ -49,8 +59,10 @@ export function Nav({
 }: NavProps) {
   const pathname = usePathname()
   const anchorKey = links
-    .filter((link) => link.href.startsWith('#'))
-    .map((link) => link.href.slice(1))
+    .filter((link) => !link.external)
+    .map((link) => splitHash(link.href, pathname))
+    .filter((link) => link.hash !== '' && link.path === pathname)
+    .map((link) => link.hash)
     .join(',')
   const [spy, setSpy] = useState('')
 
@@ -89,25 +101,30 @@ export function Nav({
 
   const isCurrent = (link: NavLink) => {
     if (link.active !== undefined) return link.active
-    if (link.href.startsWith('#')) return spy === link.href.slice(1)
     if (link.external) return false
-    return link.href === '/' ? pathname === '/' : pathname.startsWith(link.href)
+    const { path, hash } = splitHash(link.href, pathname)
+    if (hash !== '') return pathname === path && spy === hash
+    return path === '/' ? pathname === '/' : pathname.startsWith(path)
   }
 
   return (
     <header
       className={`relative z-10 w-full border-b border-ui ${
         sticky
-          ? 'sticky top-0 bg-bg-canvas/[0.72] backdrop-blur-xl backdrop-saturate-[1.2]'
+          ? 'sticky top-0 bg-scrim backdrop-blur-md backdrop-saturate-[1.2]'
           : 'bg-bg-canvas'
       } ${className}`}
     >
-      <span
-        aria-hidden="true"
-        className="absolute left-0 -bottom-px h-px w-24 bg-accent"
-      />
       <div className="max-w-6xl mx-auto h-14 flex items-center gap-3 px-4 sm:gap-6 sm:px-6">
-        {logo ?? <Brand name={brand} />}
+        {/* the accent stub starts at the content edge rather than the viewport
+            edge, and keeps the source system's fixed 96px run */}
+        <div className="relative flex h-full items-center">
+          {logo ?? <Brand name={brand} />}
+          <span
+            aria-hidden="true"
+            className="absolute left-0 -bottom-px h-px w-24 bg-accent"
+          />
+        </div>
 
         <nav
           aria-label={navLabel}
@@ -116,7 +133,7 @@ export function Nav({
           {links.map((link) => {
             const current = isCurrent(link)
 
-            if (link.external || link.href.startsWith('#')) {
+            if (link.external) {
               return (
                 <a
                   key={link.href}
