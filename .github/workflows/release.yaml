@@ -64,6 +64,11 @@ jobs:
       - name: Update version
         run: pnpm version "${{ steps.version.outputs.version }}" --no-git-tag-version --allow-same-version
 
+      # pnpm version rewrites the manifest with its own formatting, which the
+      # next run's lint step then rejects
+      - name: Format the manifest
+        run: pnpm exec biome check --write package.json
+
       - name: Generate changelog
         uses: orhun/git-cliff-action@v4
         with:
