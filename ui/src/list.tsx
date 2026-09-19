@@ -1,16 +1,31 @@
+'use client'
+
 import { ArrowRight } from 'lucide-react'
-import type { CSSProperties, HTMLAttributes, ReactNode } from 'react'
+import type {
+  CSSProperties,
+  ElementType,
+  HTMLAttributes,
+  ReactNode,
+} from 'react'
+import { createContext, useContext } from 'react'
+
+// a linked row is an <a> unless the site hands us its router's link, and a
+// site sets that once on the list rather than on every row
+const RowAs = createContext<ElementType>('a')
 
 // == List ==
 
 type ListProps = HTMLAttributes<HTMLUListElement> & {
   children: ReactNode
   lead?: string
+  /** Element or component used for a linked row, e.g. next/link */
+  as?: ElementType
 }
 
 export function List({
   children,
   lead = '88px',
+  as = 'a',
   className = '',
   style,
   ...rest
@@ -22,7 +37,7 @@ export function List({
       style={{ ...style, '--lead': lead } as CSSProperties}
       className={`list-none m-0 p-0 border-t border-faint ${className}`}
     >
-      {children}
+      <RowAs.Provider value={as}>{children}</RowAs.Provider>
     </ul>
   )
 }
@@ -36,6 +51,8 @@ type RowProps = Omit<HTMLAttributes<HTMLElement>, 'title'> & {
   desc?: ReactNode
   trail?: ReactNode
   static?: boolean
+  /** Element or component used for a linked row, overriding the list's */
+  as?: ElementType
 }
 
 export function Row({
@@ -45,9 +62,12 @@ export function Row({
   desc,
   trail,
   static: isStatic = false,
+  as,
   className = '',
   ...rest
 }: RowProps) {
+  const inherited = useContext(RowAs)
+  const Link = as ?? inherited
   const actionable = !isStatic && (href != null || rest.onClick != null)
 
   const classes = `group relative grid w-full grid-cols-[1fr] sm:grid-cols-[var(--lead,88px)_1fr_auto] items-baseline gap-0.5 sm:gap-4 p-3 border-b border-faint fg-primary text-left no-underline transition-colors duration-fast focus-ring ${
@@ -88,9 +108,9 @@ export function Row({
   if (href) {
     return (
       <li>
-        <a {...rest} href={href} className={classes}>
+        <Link {...rest} href={href} className={classes}>
           {body}
-        </a>
+        </Link>
       </li>
     )
   }
