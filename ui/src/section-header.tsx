@@ -2,19 +2,41 @@ import type { ReactNode } from 'react'
 
 type SectionHeaderProps = {
   title: string
+  id?: string
   count?: number
+  level?: 2 | 3 | 4
+  action?: ReactNode
   note?: ReactNode
+  className?: string
 }
 
-export function SectionHeader({ title, count, note }: SectionHeaderProps) {
+export function SectionHeader({
+  title,
+  id,
+  count,
+  level = 2,
+  action,
+  note,
+  className = '',
+}: SectionHeaderProps) {
+  const Heading = `h${level}` as 'h2' | 'h3' | 'h4'
+
   return (
-    <div className="flex items-baseline gap-2 border-b border-ui pb-2">
-      <span className="type-label fg-subtle">{'//'}</span>
-      <h2 className="type-label fg-primary">{title}</h2>
-      {typeof count === 'number' && (
-        <span className="type-meta fg-muted">({count})</span>
+    <div id={id} className={`flex items-center gap-3 mb-4 ${className}`}>
+      <Heading className="m-0 type-display text-lg fg-title">
+        <span aria-hidden="true" className="tracking-normal text-accent">
+          {'//'}
+        </span>{' '}
+        {title}
+      </Heading>
+      {count != null && (
+        <span className="px-1.5 rounded-full bg-bg-raised fg-subtle text-[11px] leading-[18px]">
+          {count}
+        </span>
       )}
-      {note && <span className="type-meta fg-muted ml-auto">{note}</span>}
+      <span aria-hidden="true" className="rule-dashed flex-1 h-px" />
+      {note && <span className="flex-none type-meta fg-muted">{note}</span>}
+      {action && <span className="flex-none">{action}</span>}
     </div>
   )
 }

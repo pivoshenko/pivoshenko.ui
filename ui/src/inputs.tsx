@@ -1,5 +1,53 @@
-import { Search, X } from 'lucide-react'
-import type { InputHTMLAttributes, ReactNode } from 'react'
+import { ChevronRight } from 'lucide-react'
+import type {
+  ComponentPropsWithRef,
+  InputHTMLAttributes,
+  ReactNode,
+} from 'react'
+
+const fieldInput =
+  'flex-1 min-w-0 p-0 border-0 bg-transparent text-fg-default font-mono text-sm leading-5 placeholder:text-fg-faint outline-none focus:outline-none focus-visible:outline-none focus:shadow-none'
+
+// the native cancel affordance is a white glyph in the dark chrome, so it is
+// desaturated down to the field's own foreground weight
+const cancelButton =
+  '[&::-webkit-search-cancel-button]:[filter:grayscale(1)_opacity(0.6)]'
+
+// ComponentPropsWithRef rather than InputHTMLAttributes: a caller needs the ref
+// to focus the field from a keyboard shortcut, and in React 19 a ref is an
+// ordinary prop, so it rides along in ...rest without forwardRef
+type SearchFieldProps = ComponentPropsWithRef<'input'> & {
+  hint?: ReactNode
+}
+
+export function SearchField({
+  hint,
+  className = '',
+  ...rest
+}: SearchFieldProps) {
+  return (
+    <div
+      className={`flex items-center gap-2 h-9 px-3 border border-card rounded-md bg-bg-sunken transition-colors duration-fast focus-within:border-accent ${className}`}
+    >
+      <ChevronRight
+        size={14}
+        strokeWidth={2}
+        aria-hidden="true"
+        className="text-accent shrink-0"
+      />
+      <input
+        type="search"
+        {...rest}
+        className={`${fieldInput} ${cancelButton}`}
+      />
+      {hint ? (
+        <kbd className="shrink-0 px-1.5 py-px border border-ui rounded-sm fg-subtle font-mono text-[11px] leading-4">
+          {hint}
+        </kbd>
+      ) : null}
+    </div>
+  )
+}
 
 type TextInputProps = InputHTMLAttributes<HTMLInputElement>
 
@@ -8,49 +56,8 @@ export function TextInput({ className = '', ...rest }: TextInputProps) {
     <input
       type="text"
       {...rest}
-      className={`font-mono text-sm bg-bg-surface text-fg-default border border-ui rounded px-2.5 py-1.5 outline-none focus:border-accent-primary placeholder:fg-muted disabled:opacity-50 transition-colors ${className}`}
+      className={`h-9 px-3 border border-card rounded-md bg-bg-sunken text-fg-default font-mono text-sm leading-5 placeholder:text-fg-faint outline-none focus:border-accent disabled:opacity-50 transition-colors duration-fast focus-ring ${className}`}
     />
-  )
-}
-
-type SearchInputProps = InputHTMLAttributes<HTMLInputElement> & {
-  leading?: ReactNode
-  trailing?: ReactNode
-  onClear?: () => void
-}
-
-export function SearchInput({
-  leading = <Search size={14} strokeWidth={2} aria-hidden="true" />,
-  trailing,
-  onClear,
-  value,
-  className = '',
-  ...rest
-}: SearchInputProps) {
-  const showClear = onClear && typeof value === 'string' && value.length > 0
-  return (
-    <div
-      className={`inline-flex items-center gap-2 bg-bg-surface border border-ui rounded px-2.5 py-1.5 focus-within:border-accent-primary transition-colors ${className}`}
-    >
-      {leading ? <span className="fg-muted">{leading}</span> : null}
-      <input
-        type="search"
-        value={value}
-        {...rest}
-        className="bg-transparent font-mono text-sm text-fg-default placeholder:fg-muted outline-none flex-1 min-w-0"
-      />
-      {showClear ? (
-        <button
-          type="button"
-          aria-label="Clear"
-          onClick={onClear}
-          className="fg-muted hover-secondary"
-        >
-          <X size={12} strokeWidth={2} aria-hidden="true" />
-        </button>
-      ) : null}
-      {trailing ? <span className="fg-muted">{trailing}</span> : null}
-    </div>
   )
 }
 
@@ -67,13 +74,13 @@ export function Checkbox({
   return (
     <label
       htmlFor={id}
-      className={`inline-flex items-center gap-2 font-mono text-sm fg-secondary cursor-pointer ${className}`}
+      className={`inline-flex items-center gap-2 font-mono text-[13px] leading-5 fg-body cursor-pointer ${className}`}
     >
       <input
         id={id}
         type="checkbox"
         {...rest}
-        className="w-4 h-4 bg-bg-surface border border-ui rounded-sm accent-accent-primary"
+        className="w-4 h-4 shrink-0 border border-card rounded-sm bg-bg-sunken accent-accent focus-ring"
       />
       {label}
     </label>

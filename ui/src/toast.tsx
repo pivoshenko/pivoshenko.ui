@@ -1,18 +1,21 @@
-import type { ReactNode } from 'react'
+import type { OutputHTMLAttributes, ReactNode } from 'react'
 
-type ToastProps = {
+type ToastProps = Omit<OutputHTMLAttributes<HTMLElement>, 'children'> & {
   icon?: ReactNode
   children: ReactNode
   className?: string
 }
 
-export function Toast({ icon, children, className = '' }: ToastProps) {
+export function Toast({ icon, children, className = '', ...rest }: ToastProps) {
   return (
     <output
-      className={`inline-flex items-center gap-2 bg-bg-surface border border-ui rounded px-3 py-2 font-mono text-sm fg-secondary ${className}`}
+      {...rest}
+      className={`inline-flex items-center gap-2 px-4 py-3 border border-card rounded-md bg-bg-surface shadow-rest font-mono text-sm leading-relaxed fg-body ${className}`}
     >
       {icon ? (
-        <span className="flex-shrink-0 text-accent-success">{icon}</span>
+        <span aria-hidden="true" className="shrink-0 inline-flex text-accent">
+          {icon}
+        </span>
       ) : null}
       <span>{children}</span>
     </output>
