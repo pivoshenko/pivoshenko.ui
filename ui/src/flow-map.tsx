@@ -94,8 +94,17 @@ export function FlowMap({
   const wrapRef = useRef<HTMLDivElement>(null)
   const nodeRefs = useRef(new Map<string, HTMLElement>())
 
-  // The observer watches the wrapper, which covers mount, every resize and any
-  // reflow a changed node set causes - so this never needs to re-subscribe
+  // A changed node set does not reliably resize the wrapper: whichever column
+  // is tallest sets the height, so swapping a shorter column's contents leaves
+  // the box identical and the observer silent. Keying the effect on the node
+  // ids re-measures on any swap, and the observer still covers real resizes
+  const nodeKey = columns
+    .flatMap((column) => column.nodes.map((node) => node.id))
+    .join(',')
+
+  // nodeKey is never read in the effect; it is the signal that the node set
+  // changed, which is exactly what the wrapper observer cannot see
+  // biome-ignore lint/correctness/useExhaustiveDependencies: re-measure trigger
   useEffect(() => {
     const wrap = wrapRef.current
     if (!wrap) return
@@ -129,12 +138,15 @@ export function FlowMap({
     observer.observe(wrap)
     // A late webfont reflows every label, and the wrapper itself may not resize
     document.fonts?.ready.then(measure)
+    // the swap itself, after this commit's layout
+    const raf = requestAnimationFrame(measure)
 
     return () => {
       live = false
+      cancelAnimationFrame(raf)
       observer.disconnect()
     }
-  }, [])
+  }, [nodeKey])
 
   const mobile = columns.flatMap((column) =>
     column.nodes.filter((node) => node.interactive !== false),
