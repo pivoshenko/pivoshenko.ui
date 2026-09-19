@@ -29,7 +29,7 @@ export function Field({ kind, mask, tint, interactive = true }: FieldProps) {
         gap={3}
         levels={5}
         speed={0.6}
-        opacity={0.5}
+        opacity={0.38}
         seed={7}
         interactive={interactive}
       />
