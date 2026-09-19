@@ -1,7 +1,7 @@
 const path = require('node:path')
-const preset = require('./preset.js')
+const system = require('./system.js')
 
-// Re-export the role-layer preset with a content glob pointing at this
+// Re-export the design-system preset with a content glob pointing at this
 // package's component sources. Without it, Tailwind's content scanner only
 // sees the consuming site's files and prunes every class used inside
 // `pivoshenko.ui` components.
@@ -12,6 +12,6 @@ const preset = require('./preset.js')
 const pkgRoot = path.resolve(__dirname, '..')
 
 module.exports = {
-  ...preset,
+  ...system,
   content: [`${pkgRoot}/ui/src/**/*.{ts,tsx}`],
 }
