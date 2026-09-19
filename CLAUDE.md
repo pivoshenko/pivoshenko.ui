@@ -8,7 +8,7 @@
 
 - **Never published to npm.** Sites consume it as a git dependency pinned by tag, so a change here is not live until it is tagged **and** each site's `package.json` git ref is bumped
 - **No build step.** The `.` export points at `./ui/src/index.ts` - raw TSX, compiled by the consuming site, which is why `baseNextConfig` sets `transpilePackages: ['pivoshenko.ui']`. Do not add a bundler, a `dist/`, or emit-producing `tsc`; `config/tsconfig.base.json` sets `noEmit: true` deliberately
-- **No typecheck and no tests.** `just lint` is Biome only - formatting plus lint rules, not type checking. A type error in `ui/**` is caught nowhere in this repo; it surfaces when a consuming site builds
+- **No typecheck and no tests.** `just lint` is Biome only - formatting plus lint rules, not type checking. A type error in `ui/**` is caught nowhere in this repository; it surfaces when a consuming site builds
 - do not delete `.no-tests` without adding a real test command - `just test` fails hard when the sentinel is gone
 - do not add runtime dependencies. `lucide-react` is the only one; anything framework-level goes in `peerDependencies` plus `peerDependenciesMeta.<dep>.optional`, because a consumer pulling only `tsconfig.base.json` must not be forced to install React
 
@@ -26,15 +26,25 @@ The authoritative check is still a consuming site's build: add the `pnpm.overrid
 
 ## Generated Files
 
-`just vendor-theme-preset [FLAVOR]` regenerates `tailwind-preset/preset.js` and `ui/tokens.css` from a sibling `../pivoshenko.theme` checkout. Flavors: `popil` (the default), `morok`, `vatra`. Both outputs are generated - hand edits are erased by the next vendor run, and `preset.js` sits in Biome's ignore list for exactly that reason.
+`just vendor-theme-preset [FLAVOR]` regenerates **three** files from a sibling `../pivoshenko.theme` checkout. Flavors: `popil` (the default), `morok`, `vatra`.
 
-The recipe does **not** touch `ui/palette.ts`; it only prints a reminder. A token or flavor change moves these together in one commit:
+1. `tailwind-preset/preset.js` - the role-colour Tailwind layer, copied out of the theme's `tailwind-tokens/`
+2. `ui/tokens.css` - the 26 named palette slots plus the role layer, as `R G B` triples, written by `scripts/vendor-tokens.mjs`
+3. `ui/palette.ts` - the same palette in raw hex, written by the same script
 
-1. `tailwind-preset/preset.js` and `ui/tokens.css` - via the recipe
-2. `ui/palette.ts` - by hand. It is a parallel representation of the same palette in raw hex, for contexts CSS variables cannot reach: edge-runtime `ImageResponse` rendering in `ui/next/icon.tsx` and `ui/next/opengraph-image.tsx`, and the Next `themeColor` meta tag
-3. any new role class in `ui/globals.css`
+All three are generated. Hand edits are erased by the next vendor run, and `preset.js` sits in Biome's ignore list for exactly that reason. `palette.ts` used to be hand-maintained and drifted; it is generated now precisely so the OG images and the browser theme colour cannot fall behind the in-DOM look.
 
-Skip `palette.ts` and OG images plus the browser theme color silently drift from the in-DOM look.
+`scripts/` is dev-only and deliberately outside `files` in `package.json`, so it never ships to a consuming site.
+
+`tailwind-preset/system.js` is **not** generated. It is the hand-written design-system layer sitting on top of `preset.js`: the named palette colours, the live `--accent` indirection, radii, shadows, motion and the display face. It is flavor-agnostic, so a vendor run never touches it.
+
+## Visual Source of Truth
+
+The components are a port of a vendored plain-CSS build of the same design system, which lives in the sibling `pivoshenko.ai` repository at `plugins/herdr/agents.fleet/public/vendor/` (`bundle.css` for every rule by class name, `bundle.js` for the markup each component emits). When a component's geometry, state or motion is in question, that bundle answers it. Deliberate divergences so far:
+
+- section headings are **larger** than the bundle's, which renders them at body size. The colour stays on the `//` prefix alone - the words are `fg-title`, and prose `h3` and card titles likewise
+- `Card` holds still. The bundle lifts it and blooms a cursor-tracked gradient under it; on a page of sixty cards that reads as noise, so the only hover affordance is the border
+- every text glyph is a lucide icon
 
 ## Exports and Gating
 
@@ -47,7 +57,7 @@ Skip `palette.ts` and OG images plus the browser theme color silently drift from
 
 This package is the authoritative home for the token and utility vocabulary. Consuming sites should point here instead of copying the list into their own docs.
 
-Colors originate in `../pivoshenko.theme`, land in `ui/tokens.css` as space-separated `R G B` triples on `:root` (not hex, so Tailwind can compose them with `<alpha-value>`), and `tailwind-preset/preset.js` maps each one to a Tailwind color name:
+Colors originate in `../pivoshenko.theme`, land in `ui/tokens.css` as space-separated `R G B` triples on `:root` (not hex, so Tailwind can compose them with `<alpha-value>`), and the preset maps each one to a Tailwind color name:
 
 | Group | Tokens | Utilities |
 | --- | --- | --- |
@@ -56,16 +66,40 @@ Colors originate in `../pivoshenko.theme`, land in `ui/tokens.css` as space-sepa
 | `border` | `subtle`, `default`, `strong` | `border-border-strong`, ... |
 | `accent` | `primary`, `secondary`, `success`, `warning`, `danger`, `info` | `text-accent-success`, `bg-accent-danger/15`, ... |
 
-`fg`, `border`, and `accent` also carry a `DEFAULT`, aliasing `fg-default`, `border-default`, and `accent-primary` respectively. The preset is flavor-agnostic: its output is byte-identical for every flavor, only the variable values differ.
+`fg` and `border` also carry a `DEFAULT`, aliasing `fg-default` and `border-default`. The preset is flavor-agnostic: its output is byte-identical for every flavor, only the variable values differ.
+
+`accent`'s `DEFAULT` is the one that moves. It resolves `--accent`, which `:root` points at `accent-primary` and **any subtree retargets with `data-accent`**:
+
+```html
+<html data-accent="peach">
+```
+
+`SiteLayout` stamps that attribute from its `accent` prop, defaulting to `peach`. So `text-accent`, `bg-accent`, `border-accent` follow the site's choice while `accent-primary`, `accent-success` and the rest stay pinned to their semantic role. A component that wants the site accent uses `accent`; one that means "this is an error" uses `accent-danger`.
+
+`system.js` also registers the 14 chromatic palette slots (`peach`, `blue`, `mauve`, ...) plus `crust`, `overlay1` and `overlay2`, for the places a role token has no name, and these non-colour scales:
+
+| Scale | Values |
+| --- | --- |
+| `rounded-*` | `sm` 4px, `DEFAULT`/`md` 6px, `lg` 10px |
+| `shadow-*` | `chip`, `rest`, `lift`, `float`, plus `lifted` and `raised` - two Tailwind shadow utilities overwrite each other rather than stacking, so the composed pairs are theme keys |
+| `duration-*` | `fast` 120ms, `base` 220ms, `slow` 600ms |
+| `ease-*` | `out`, `in-out` - the system's curves, not Tailwind's |
+| `font-*` | `mono` (JetBrains Mono), `display` (Martian Mono) |
+| `animate-*` | `rise`, `menu-in` |
+
+Spacing needs no override: the system's `--space-N` are plain 4px steps, so Tailwind's default scale already matches.
 
 `ui/globals.css` layers semantic helper classes on top, and **components should reach for these** rather than the raw token utilities, so a role remapping stays a one-line change:
 
-- type: `type-heading`, `type-body`, `type-ui`, `type-label`, `type-meta`, `type-logo`
+- type: `type-display`, `type-heading`, `type-body`, `type-ui`, `type-label`, `type-meta`, `type-logo`
 - foreground: `fg-title`, `fg-primary`, `fg-secondary` (all three map to `text-fg-default`), `fg-body` (`fg-muted`), `fg-subtle` (`fg-subtle`), `fg-muted` (`fg-faint`)
 - hover foreground: `hover-primary`, `hover-secondary`
 - background: `bg-tag`, `bg-tag-active`
-- border: `border-ui` (`border-default`), `border-faint` (`border-subtle`)
+- border: `border-ui` (`border-default`), `border-faint` (`border-subtle`), `border-card` (translucent `overlay0/60`)
+- surface: `surface-card`, `surface-sunken`
+- focus: `focus-ring` - never hand-roll an outline
 - underline decoration: `deco-subtle`
+- patterns Tailwind cannot express: `rule-dashed`, `mask-radial`, `mask-bottom`
 
 The helper names are deliberately **not** the token names - `.fg-muted` maps to `text-fg-faint`, not `text-fg-muted`. Raw token utilities are fine where no helper class exists, accent tones in particular.
 
@@ -86,13 +120,16 @@ Read any file in `ui/src/` for the pattern; it is uniform. In short:
 - multi-variant styling is a `Record<Variant, string>` lookup table at module scope above the component, not conditionals inline in JSX. A plain two-state toggle stays an inline ternary
 - **`'use client'` only where a hook genuinely demands it.** Everything else is a server component; keep it that way
 - icons: `lucide-react` at `w-4 h-4` / `size={14}`, `strokeWidth={2}`, `aria-hidden="true"`. Brand marks that lucide lacks (GitHub, LinkedIn, RSS) are inline `<svg role="img" viewBox="0 0 24 24">` components local to the file that uses them
+- **no text glyphs.** A caret, check, arrow, prompt or status mark is a lucide icon, never a literal character. The one exception is the `//` prefixing a section heading or a table-of-contents title, which is wordmark rather than iconography
+- prefer a real `<span aria-hidden="true">` over a `::before`/`::after` pseudo-element - the accent stub under the header, the dot before a footer link, the traffic lights on a terminal
+- prefer a Tailwind state variant over a data attribute where one exists: `aria-pressed:`, `aria-current:`, `group-hover:`, `motion-reduce:`. Every transform-based transition is `motion-reduce:` guarded
 - new components go in `ui/src/`, one file per family, and **must** be added to `ui/src/index.ts`
 
 ## Formatting
 
 Biome, not Prettier or ESLint. Run `just format` before committing rather than hand-matching its settings.
 
-`config/biome.json` is the copy sites extend; the root `biome.json` is this repo's own. They are near-identical but separate - a rule change usually belongs in both.
+`config/biome.json` is the copy sites extend; the root `biome.json` is this repository's own. They are near-identical but separate - a rule change usually belongs in both.
 
 ## Release
 
