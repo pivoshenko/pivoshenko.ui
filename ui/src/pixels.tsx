@@ -79,6 +79,11 @@ type PixelsProps = HTMLAttributes<HTMLDivElement> & {
   opacity?: number
   /** Field value above which a pixel takes the accent instead of the ink */
   accentAt?: number
+  /** How much easier a pixel reaches the accent at the right edge than the
+      left, so a band can be lit where its copy is not */
+  accentLean?: number
+  /** Extra alpha at the left edge, where a band's mask thins the field out */
+  lift?: number
   seed?: number
   interactive?: boolean
   scale?: number
@@ -97,6 +102,8 @@ export function Pixels({
   speed = 1,
   opacity = 1,
   accentAt = 0.72,
+  accentLean = 0,
+  lift = 0,
   seed = 11,
   interactive = true,
   scale = 0.07,
@@ -215,10 +222,14 @@ export function Pixels({
           if (q <= 0) continue
           if (variant === 'sparse' && q < 0.5) continue
 
-          const accent = q >= accentAt
+          const lean = x / Math.max(1, cols - 1)
+          const accent = q >= accentAt - accentLean * lean
+          // a floor under the quiet cells, so the field reads as a full grid
+          // rather than a scatter of bright ones over empty ground
+          const alpha = accent ? 0.5 + q * 0.4 : 0.14 + q * 0.55
           ctx.fillStyle = rgb(
             accent ? hi : ink,
-            accent ? 0.5 + q * 0.4 : q * 0.5,
+            Math.min(1, alpha * (1 + lift * (1 - lean))),
           )
           ctx.fillRect(x * cell, y * cell, side, side)
         }
@@ -320,6 +331,8 @@ export function Pixels({
     levels,
     speed,
     accentAt,
+    accentLean,
+    lift,
     seed,
     interactive,
     scale,

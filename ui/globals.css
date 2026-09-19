@@ -190,14 +190,23 @@
     mask-image: linear-gradient(#000 40%, transparent);
   }
 
-  /* Clears the left third where a band's copy sits: a pixel field is opaque
-     cell by cell, so unlike a hairline contour it fights the text under it */
+  /* Dims rather than clears the left, where a band's copy sits: a pixel field
+     is opaque cell by cell, so unlike a hairline contour it fights the text
+     under it, but an empty half reads as a missing field */
   .mask-copy {
-    -webkit-mask-image: linear-gradient(to right, transparent 6%, #000 46%),
-      linear-gradient(#000 40%, transparent);
+    -webkit-mask-image: linear-gradient(
+        to right,
+        rgb(0 0 0 / 0.3),
+        rgb(0 0 0 / 0.45) 30%,
+        #000 62%
+      ), linear-gradient(#000 40%, transparent);
     -webkit-mask-composite: source-in;
-    mask-image: linear-gradient(to right, transparent 6%, #000 46%),
-      linear-gradient(#000 40%, transparent);
+    mask-image: linear-gradient(
+        to right,
+        rgb(0 0 0 / 0.3),
+        rgb(0 0 0 / 0.45) 30%,
+        #000 62%
+      ), linear-gradient(#000 40%, transparent);
     mask-composite: intersect;
   }
 }

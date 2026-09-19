@@ -100,9 +100,7 @@ export function Footer({
     <footer
       className={`relative mt-16 w-full border-t border-border-strong bg-crust overflow-hidden isolate ${className}`}
     >
-      {pattern ? (
-        <Field kind={field} mask="radial" tint={tint} interactive={false} />
-      ) : null}
+      {pattern ? <Field kind={field} mask="radial" tint={tint} /> : null}
       <div className="relative z-10 mx-auto flex h-14 max-w-6xl flex-wrap items-center justify-between gap-x-4 gap-y-2 px-4 type-meta fg-subtle sm:px-6">
         {/* the accent stub starts at the content edge rather than the viewport
             edge, matching the nav's, and keeps its fixed 96px run */}
