@@ -115,9 +115,7 @@ export function Catalog({
   // own/external split - two levels of sub-heading would out-rank the section
   const blocks = entries.some((entry) => entry.group)
     ? bucket(shown, (entry) => entry.group ?? 'elsewhere')
-    : bucket(shown, (entry) => (isOwn(entry) ? 'own' : 'external')).filter(
-        (block) => hasExternal || block.label !== 'own',
-      )
+    : bucket(shown, (entry) => (isOwn(entry) ? 'own' : 'external'))
 
   return (
     <div className={`space-y-10 ${className}`}>
