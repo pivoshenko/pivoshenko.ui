@@ -10,6 +10,7 @@ import {
 } from 'lucide-react'
 import type { ReactNode } from 'react'
 import { useMemo, useState } from 'react'
+import { Card, CardGrid } from './card'
 import { Dialog } from './dialog'
 import { EmptyState } from './empty'
 import {
@@ -47,8 +48,14 @@ type CatalogProps = {
   archived?: CatalogEntry[]
   /** a handful of entries reads faster unfiltered than it does behind a bar */
   filters?: boolean
+  /** rows scan faster; cards give a long description room to breathe */
+  layout?: CatalogLayout
+  /** cards only: minimum track width, so a row fits as many as it can */
+  min?: string
   className?: string
 }
+
+export type CatalogLayout = 'rows' | 'cards'
 
 export function Catalog({
   id,
@@ -56,6 +63,8 @@ export function Catalog({
   entries,
   archived = [],
   filters: withFilters,
+  layout = 'rows',
+  min = '340px',
   className = '',
 }: CatalogProps) {
   const [active, setActive] = useState<Set<string>>(new Set())
@@ -157,6 +166,8 @@ export function Catalog({
                 label={hasExternal ? 'own' : undefined}
                 count={own.length}
                 entries={own}
+                layout={layout}
+                min={min}
                 onOpen={setOpened}
               />
             )}
@@ -165,6 +176,8 @@ export function Catalog({
                 label="external"
                 count={external.length}
                 entries={external}
+                layout={layout}
+                min={min}
                 onOpen={setOpened}
               />
             )}
@@ -197,11 +210,12 @@ export function Catalog({
           {!showArchived ? null : shownArchived.length === 0 ? (
             <NoMatches />
           ) : (
-            <List lead="1.75rem">
-              {shownArchived.map((entry) => (
-                <EntryRow key={entry.id} entry={entry} onOpen={setOpened} />
-              ))}
-            </List>
+            <Entries
+              entries={shownArchived}
+              layout={layout}
+              min={min}
+              onOpen={setOpened}
+            />
           )}
         </section>
       )}
@@ -215,25 +229,73 @@ export function Catalog({
   )
 }
 
-// == Rows ==
+// == Entries ==
 
 type BlockProps = {
   label?: string
   count: number
   entries: CatalogEntry[]
+  layout: CatalogLayout
+  min: string
   onOpen: (entry: CatalogEntry) => void
 }
 
-function Block({ label, count, entries, onOpen }: BlockProps) {
+function Block({ label, count, entries, layout, min, onOpen }: BlockProps) {
   return (
     <div className="space-y-4">
       {label && <SubHeader label={label} count={count} />}
-      <List lead="1.75rem">
-        {entries.map((entry) => (
-          <EntryRow key={entry.id} entry={entry} onOpen={onOpen} />
-        ))}
-      </List>
+      <Entries entries={entries} layout={layout} min={min} onOpen={onOpen} />
     </div>
+  )
+}
+
+type EntriesProps = {
+  entries: CatalogEntry[]
+  layout: CatalogLayout
+  min: string
+  onOpen: (entry: CatalogEntry) => void
+}
+
+function Entries({ entries, layout, min, onOpen }: EntriesProps) {
+  if (layout === 'cards') {
+    return (
+      <CardGrid min={min}>
+        {entries.map((entry) => (
+          <EntryCard key={entry.id} entry={entry} onOpen={onOpen} />
+        ))}
+      </CardGrid>
+    )
+  }
+  return (
+    <List lead="1.75rem">
+      {entries.map((entry) => (
+        <EntryRow key={entry.id} entry={entry} onOpen={onOpen} />
+      ))}
+    </List>
+  )
+}
+
+type EntryCardProps = {
+  entry: CatalogEntry
+  onOpen: (entry: CatalogEntry) => void
+}
+
+function EntryCard({ entry, onOpen }: EntryCardProps) {
+  return (
+    <Card
+      glyph={entry.icon}
+      title={entry.name}
+      desc={entry.description}
+      clamp
+      onClick={() => onOpen(entry)}
+      className={entry.muted ? 'opacity-70' : undefined}
+    >
+      <Tags className="mt-3">
+        {entry.tags.map((tag) => (
+          <Tag key={tag}>{tag}</Tag>
+        ))}
+      </Tags>
+    </Card>
   )
 }
 

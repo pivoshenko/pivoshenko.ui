@@ -2,7 +2,11 @@ export { Avatar } from './avatar'
 export { Breadcrumb, type Crumb } from './breadcrumb'
 export { ArrowLink, CopyPill, IconButton, TextButton } from './buttons'
 export { Callout, type CalloutTone } from './callout'
-export { Catalog, type CatalogEntry } from './catalog'
+export {
+  Catalog,
+  type CatalogEntry,
+  type CatalogLayout,
+} from './catalog'
 export { Card, CardGrid } from './card'
 export { CodeBlock, InlineCode, Kbd } from './code'
 export { Contours } from './contours'
