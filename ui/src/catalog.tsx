@@ -38,6 +38,8 @@ export type CatalogEntry = {
   local?: boolean
   /** dimmed, for archived or retired entries */
   muted?: boolean
+  /** sub-heading to file this entry under; falls back to the own/external split */
+  group?: string
   icon?: ReactNode
 }
 
@@ -108,9 +110,14 @@ export function Catalog({
 
   const shown = keep(entries)
   const shownArchived = keep(archived)
-  const own = shown.filter(isOwn)
-  const external = shown.filter((entry) => !isOwn(entry))
   const hasExternal = entries.some((entry) => !isOwn(entry))
+  // an entry that names its own group opts the whole catalog out of the
+  // own/external split - two levels of sub-heading would out-rank the section
+  const blocks = entries.some((entry) => entry.group)
+    ? bucket(shown, (entry) => entry.group ?? 'elsewhere')
+    : bucket(shown, (entry) => (isOwn(entry) ? 'own' : 'external')).filter(
+        (block) => hasExternal || block.label !== 'own',
+      )
 
   return (
     <div className={`space-y-10 ${className}`}>
@@ -161,26 +168,17 @@ export function Catalog({
           <NoMatches />
         ) : (
           <div className="space-y-8">
-            {own.length > 0 && (
+            {blocks.map((block) => (
               <Block
-                label={hasExternal ? 'own' : undefined}
-                count={own.length}
-                entries={own}
+                key={block.label}
+                label={blocks.length > 1 ? block.label : undefined}
+                count={block.entries.length}
+                entries={block.entries}
                 layout={layout}
                 min={min}
                 onOpen={setOpened}
               />
-            )}
-            {external.length > 0 && (
-              <Block
-                label="external"
-                count={external.length}
-                entries={external}
-                layout={layout}
-                min={min}
-                onOpen={setOpened}
-              />
-            )}
+            ))}
           </div>
         )}
       </section>
@@ -227,6 +225,20 @@ export function Catalog({
       />
     </div>
   )
+}
+
+// Buckets in first-appearance order, so the caller decides the running order
+// by the order it hands the entries over
+function bucket(
+  entries: CatalogEntry[],
+  labelOf: (entry: CatalogEntry) => string,
+): Array<{ label: string; entries: CatalogEntry[] }> {
+  const out = new Map<string, CatalogEntry[]>()
+  for (const entry of entries) {
+    const label = labelOf(entry)
+    out.set(label, [...(out.get(label) ?? []), entry])
+  }
+  return Array.from(out, ([label, list]) => ({ label, entries: list }))
 }
 
 // == Entries ==
