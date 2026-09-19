@@ -1,12 +1,14 @@
 import { ImageResponse } from 'next/og'
 import type { ReactElement } from 'react'
-import { palette } from '../palette'
+import { type AccentName, palette } from '../palette'
 
 export type OgImageProps = {
   brand: string
   title: string
   subtitle: string
   domain: string
+  /** Match the site's own data-accent, or the card drifts from the live page */
+  accent?: AccentName
 }
 
 export const ogSize = { width: 1200, height: 630 }
@@ -21,6 +23,7 @@ function OgCard({
   title,
   subtitle,
   domain,
+  accent = 'peach',
 }: OgImageProps): ReactElement {
   return (
     <div
@@ -46,7 +49,7 @@ function OgCard({
             fontSize: 96,
             fontWeight: 700,
             letterSpacing: '-2px',
-            color: palette.accent.primary,
+            color: palette.named[accent],
           }}
         >
           {title}
