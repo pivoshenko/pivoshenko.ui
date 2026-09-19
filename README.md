@@ -14,17 +14,36 @@ Shared frontend artifacts (Biome config, TypeScript base, Tailwind preset, React
 
 | Import path                            | What it is                                                          |
 | -------------------------------------- | ------------------------------------------------------------------- |
-| `pivoshenko.ui`                        | React components (Footer, Nav, PageShell, ...)                       |
+| `pivoshenko.ui`                        | React components (Nav, Footer, PageShell, Hero, Contours, Card, ...) |
 | `pivoshenko.ui/biome.json`             | Shared Biome config                                                  |
 | `pivoshenko.ui/tsconfig.base.json`     | Shared TypeScript base                                               |
 | `pivoshenko.ui/postcss.config.mjs`     | Shared PostCSS config                                                |
-| `pivoshenko.ui/tailwind-preset`        | Tailwind preset (role layer, flavor-agnostic)                        |
-| `pivoshenko.ui/tailwind-preset/site`   | Preset plus JetBrains-Mono fontFamily and the `withUiContent` helper |
+| `pivoshenko.ui/tailwind-preset`        | Tailwind preset (role layer plus the design-system scales)           |
+| `pivoshenko.ui/tailwind-preset/site`   | Preset plus the two `next/font` families and the `withUiContent` helper |
 | `pivoshenko.ui/globals.css`            | Token CSS vars and the role-based helper classes                     |
 | `pivoshenko.ui/next/site-layout`       | `SiteLayout`, `siteMetadata()`, `siteViewport`                       |
 | `pivoshenko.ui/next/config`            | `baseNextConfig`                                                     |
 | `pivoshenko.ui/next/icon`              | Shared favicon `ImageResponse`                                       |
-| `pivoshenko.ui/next/opengraph-image`   | `createOgImage({ brand, title, subtitle, domain })`                  |
+| `pivoshenko.ui/next/opengraph-image`   | `createOgImage({ brand, title, subtitle, domain, accent })`          |
+
+## Design System
+
+The components are a native React + Tailwind implementation of the `Pivoshenko` design system: a warm
+off-black surface ramp from [`pivoshenko.theme`](https://github.com/pivoshenko/pivoshenko.theme), JetBrains
+Mono for text and Martian Mono for display, lucide icons throughout (never a text glyph), and an animated
+topographic contour field behind the hero and the footer.
+
+Every `accent` utility resolves through one live CSS variable, so a site picks its accent in one place and
+every component follows:
+
+```tsx
+<SiteLayout brand="pivoshenko.ai" accent="peach">
+```
+
+Any named palette slot works - `peach`, `blue`, `teal`, `mauve`, and the rest of the 14. A subtree can
+override it with a plain `data-accent` attribute.
+
+`CLAUDE.md` documents the full token and helper-class vocabulary; point at it rather than copying the list.
 
 ## Consumption
 
