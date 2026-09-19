@@ -12,12 +12,7 @@
   "engines": {
     "node": ">=22"
   },
-  "files": [
-    "config",
-    "tailwind-preset",
-    "ui",
-    "postcss.config.mjs"
-  ],
+  "files": ["config", "tailwind-preset", "ui", "postcss.config.mjs"],
   "exports": {
     "./package.json": "./package.json",
     "./biome.json": "./config/biome.json",
