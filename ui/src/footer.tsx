@@ -105,13 +105,14 @@ export function Footer({
           seed={7}
         />
       ) : null}
-      <span
-        aria-hidden="true"
-        className="absolute left-0 -top-px z-10 h-[2px] w-24 bg-accent"
-      />
-
       <div className="relative z-10 mx-auto flex h-14 max-w-6xl flex-wrap items-center justify-between gap-x-4 gap-y-2 px-4 type-meta fg-subtle sm:px-6">
-        <span>
+        {/* the accent stub starts at the content edge rather than the viewport
+            edge, matching the nav's, and keeps its fixed 96px run */}
+        <span className="relative flex h-full items-center">
+          <span
+            aria-hidden="true"
+            className="absolute left-0 -top-px h-[2px] w-24 bg-accent"
+          />
           {year} Volodymyr Pivoshenko &lt;
           <a
             href={`mailto:${contact}`}
