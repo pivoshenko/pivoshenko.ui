@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.12.2] - 2026-09-19
+
+### Design
+
+- **pixels**: Start the field nearer the copy and lighten it
+
+### Miscellaneous
+
+- Reformat the package manifest after the release bump
+
 ## [0.12.1] - 2026-09-19
 
 ### Bug fixes
@@ -11,6 +21,10 @@ All notable changes to this project will be documented in this file.
 ### Miscellaneous
 
 - Reformat the package manifest after the release bump
+
+### Release
+
+- V0.12.1
 
 ## [0.12.0] - 2026-09-19
 
