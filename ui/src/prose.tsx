@@ -20,8 +20,8 @@ const prose = [
   '[&_ol]:mt-0 [&_ol]:mb-4 [&_ol]:pl-6 [&_ol]:list-decimal',
   '[&_li]:mb-1 [&_li::marker]:text-accent',
 
-  '[&_a]:text-fg-default [&_a]:underline [&_a]:decoration-accent-info',
-  '[&_a]:underline-offset-[3px] [&_a:hover]:text-accent-info',
+  '[&_a]:text-fg-default [&_a]:underline [&_a]:decoration-accent',
+  '[&_a]:underline-offset-[3px] [&_a:hover]:text-accent',
   '[&_strong]:text-fg-default [&_strong]:font-semibold',
 
   '[&_code]:px-1 [&_code]:py-px [&_code]:rounded-sm [&_code]:bg-bg-raised',
