@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.14.0] - 2026-09-20
+
+### Features
+
+- **links**: Carry the site accent on a prose link
+
 ## [0.13.0] - 2026-09-20
 
 ### Features
