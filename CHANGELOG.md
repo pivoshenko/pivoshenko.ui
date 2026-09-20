@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.15.0] - 2026-09-20
+
+### Features
+
+- **field**: Add a travelling wave interference field
+- **catalog**: Let entries link out instead of opening
+
 ## [0.14.0] - 2026-09-20
 
 ### Features
