@@ -64,4 +64,25 @@ export const palette = {
   },
 } as const
 
-export type AccentName = keyof typeof palette.named
+// Exactly the slots `ui/tokens.css` emits a `[data-accent]` rule for, so a
+// site cannot name an accent the stylesheet will not honour. The neutrals in
+// `palette.named` are deliberately absent: `data-accent="text"` matched no
+// rule and silently left `--accent` on its `accent-primary` default
+export const accentNames = [
+  'rosewater',
+  'flamingo',
+  'pink',
+  'mauve',
+  'red',
+  'maroon',
+  'peach',
+  'yellow',
+  'green',
+  'teal',
+  'sky',
+  'sapphire',
+  'blue',
+  'lavender',
+] as const
+
+export type AccentName = (typeof accentNames)[number]

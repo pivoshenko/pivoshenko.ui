@@ -13,7 +13,6 @@ export type OgImageProps = {
 
 export const ogSize = { width: 1200, height: 630 }
 export const ogContentType = 'image/png'
-export const ogRuntime = 'edge' as const
 
 // static instances, not the variable file: Satori renders a variable font at
 // one weight, so a 700 declaration against it silently rendered regular

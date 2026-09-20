@@ -13,7 +13,8 @@ type FieldProps = {
   mask: 'radial' | 'bottom'
   /** Palette slot the lit cells take; defaults to the site accent */
   tint?: AccentName
-  /** A second slot the lit cells split between, where the field supports it */
+  /** Second slot the lit cells split between. Only `chunks` and `waves`
+   *  forward it; `ascii`, `pixels` and `contours` ignore it */
   tintAlt?: AccentName
   interactive?: boolean
 }

@@ -70,14 +70,25 @@ type SiteLayoutProps = {
   footerExtras?: FooterLink[]
   /** Named palette slot every `accent` utility resolves to, site-wide */
   accent?: AccentName
-  /** Decorative field the hero and footer bands paint, site-wide */
+  /**
+   * Secondary slot, one rank down from `accent`. Sub-headings, info tags,
+   * badges and callouts take it. Left unset it stays on the palette's own
+   * `accent-info`, which is the same colour on every site regardless of accent.
+   */
+  subAccent?: AccentName
+  /**
+   * Decorative field the FOOTER band paints. A hero is rendered by the page,
+   * not by this layout, so it takes its own `field` prop - keep the two in step
+   */
   field?: FieldKind
   /** Palette slot the field's lit cells take; defaults to the site accent */
   fieldTint?: AccentName
-  /** A second slot the lit cells split between, where the field supports it */
+  /** Second slot the lit cells split between. Only `chunks` and `waves` honour it */
   fieldTintAlt?: AccentName
   /** Drop the footer's field on a site that wants the band plain */
   footerPattern?: boolean
+  /** Drop the footer's website link where it would point at the site itself */
+  footerWebsite?: boolean
   beforeShell?: ReactNode
   afterShell?: ReactNode
   children: ReactNode
@@ -88,10 +99,12 @@ export function SiteLayout({
   navLinks,
   footerExtras,
   accent = 'peach',
+  subAccent,
   field,
   fieldTint,
   fieldTintAlt,
   footerPattern,
+  footerWebsite,
   beforeShell,
   afterShell,
   children,
@@ -101,6 +114,7 @@ export function SiteLayout({
       lang="en"
       data-scroll-behavior="smooth"
       data-accent={accent}
+      data-sub-accent={subAccent}
       className={`${jetbrainsMono.variable} ${martianMono.variable}`}
     >
       <body className="font-mono antialiased">
@@ -113,6 +127,7 @@ export function SiteLayout({
           tint={fieldTint}
           tintAlt={fieldTintAlt}
           footerPattern={footerPattern}
+          footerWebsite={footerWebsite}
         >
           {children}
         </PageShell>

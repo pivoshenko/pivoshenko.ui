@@ -124,3 +124,59 @@
 [data-accent="lavender"] {
   --accent: var(--lavender);
 }
+
+[data-sub-accent="rosewater"] {
+  --accent-info: var(--rosewater);
+}
+
+[data-sub-accent="flamingo"] {
+  --accent-info: var(--flamingo);
+}
+
+[data-sub-accent="pink"] {
+  --accent-info: var(--pink);
+}
+
+[data-sub-accent="mauve"] {
+  --accent-info: var(--mauve);
+}
+
+[data-sub-accent="red"] {
+  --accent-info: var(--red);
+}
+
+[data-sub-accent="maroon"] {
+  --accent-info: var(--maroon);
+}
+
+[data-sub-accent="peach"] {
+  --accent-info: var(--peach);
+}
+
+[data-sub-accent="yellow"] {
+  --accent-info: var(--yellow);
+}
+
+[data-sub-accent="green"] {
+  --accent-info: var(--green);
+}
+
+[data-sub-accent="teal"] {
+  --accent-info: var(--teal);
+}
+
+[data-sub-accent="sky"] {
+  --accent-info: var(--sky);
+}
+
+[data-sub-accent="sapphire"] {
+  --accent-info: var(--sapphire);
+}
+
+[data-sub-accent="blue"] {
+  --accent-info: var(--blue);
+}
+
+[data-sub-accent="lavender"] {
+  --accent-info: var(--lavender);
+}

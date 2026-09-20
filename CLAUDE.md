@@ -70,6 +70,10 @@ Colors originate in `../pivoshenko.theme`, land in `ui/tokens.css` as space-sepa
 
 `SiteLayout` stamps that attribute from its `accent` prop, defaulting to `peach`. So `text-accent`, `bg-accent`, `border-accent` follow the site's choice while `accent-primary`, `accent-success` and the rest stay pinned to their semantic role. A component that wants the site accent uses `accent`; one that means "this is an error" uses `accent-danger`.
 
+`--accent-info` moves the same way, one rank down, via `data-sub-accent` and `SiteLayout`'s `subAccent` prop. It is what `SubHeader`, an info `Tag`, `StatusBadge` and `Callout` resolve, so a site picks a secondary colour there rather than overriding the token in its own `globals.css`. Left unset it keeps the palette's own `accent-info`.
+
+**Only the 14 chromatic slots are valid for either prop.** `scripts/vendor-tokens.mjs` emits a `[data-accent]` and a `[data-sub-accent]` rule per slot from one list and derives `AccentName` from that same list, so the type and the stylesheet cannot drift. The neutrals in `palette.named` (`text`, `subtext0`, `crust`, ...) are deliberately excluded: they have no rule, and `data-accent="text"` used to match nothing and leave `--accent` silently on its `accent-primary` default.
+
 `system.js` also registers the 14 chromatic palette slots (`peach`, `blue`, `mauve`, ...) plus `crust`, `overlay1` and `overlay2`, for the places a role token has no name, and these non-colour scales:
 
 | Scale | Values |

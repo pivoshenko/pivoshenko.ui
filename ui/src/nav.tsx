@@ -1,9 +1,11 @@
 'use client'
 
+import { Menu as MenuIcon } from 'lucide-react'
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import { type ReactNode, useEffect, useState } from 'react'
 import { Brand } from './logo'
+import { Menu, MenuItem } from './menu'
 
 export type NavLink = {
   href: string
@@ -58,6 +60,7 @@ export function Nav({
   className = '',
 }: NavProps) {
   const pathname = usePathname()
+  const router = useRouter()
   const anchorKey = links
     .filter((link) => !link.external)
     .map((link) => splitHash(link.href, pathname))
@@ -118,7 +121,7 @@ export function Nav({
       <div className="max-w-6xl mx-auto h-14 flex items-center gap-3 px-4 sm:gap-6 sm:px-6">
         {/* the accent stub starts at the content edge rather than the viewport
             edge, and keeps the source system's fixed 96px run */}
-        <div className="relative flex h-full items-center">
+        <div className="relative flex h-full shrink-0 items-center">
           {logo ?? <Brand name={brand} />}
           <span
             aria-hidden="true"
@@ -128,7 +131,7 @@ export function Nav({
 
         <nav
           aria-label={navLabel}
-          className="flex items-center gap-0.5 ml-auto"
+          className="ml-auto hidden items-center gap-0.5 sm:flex"
         >
           {links.map((link) => {
             const current = isCurrent(link)
@@ -165,8 +168,48 @@ export function Nav({
           })}
         </nav>
 
+        {links.length > 0 ? (
+          <div className="ml-auto sm:hidden">
+            <Menu
+              label="Menu"
+              icon={<MenuIcon size={14} strokeWidth={2} />}
+              align="end"
+            >
+              {links.map((link) => (
+                <MenuItem
+                  key={link.href}
+                  href={link.href}
+                  selected={isCurrent(link)}
+                  onClick={
+                    link.external
+                      ? undefined
+                      : (event) => {
+                          if (
+                            event.metaKey ||
+                            event.ctrlKey ||
+                            event.shiftKey ||
+                            event.altKey
+                          ) {
+                            return
+                          }
+                          event.preventDefault()
+                          router.push(link.href)
+                        }
+                  }
+                  {...(link.external && {
+                    target: '_blank',
+                    rel: 'noopener noreferrer',
+                  })}
+                >
+                  {link.label}
+                </MenuItem>
+              ))}
+            </Menu>
+          </div>
+        ) : null}
+
         {actions ? (
-          <div className="flex items-center gap-2">{actions}</div>
+          <div className="flex shrink-0 items-center gap-2">{actions}</div>
         ) : null}
       </div>
     </header>
