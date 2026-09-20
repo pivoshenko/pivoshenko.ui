@@ -2,12 +2,26 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.16.0] - 2026-09-20
+
+### Design
+
+- **prose**: Carry the site accent on a post body link
+
+### Features
+
+- **field**: Add a pixelized ascii glyph field
+
 ## [0.15.0] - 2026-09-20
 
 ### Features
 
-- **field**: Add a travelling wave interference field
 - **catalog**: Let entries link out instead of opening
+- **field**: Add a travelling wave interference field
+
+### Release
+
+- V0.15.0
 
 ## [0.14.0] - 2026-09-20
 
@@ -15,13 +29,25 @@ All notable changes to this project will be documented in this file.
 
 - **links**: Carry the site accent on a prose link
 
+### Release
+
+- V0.14.0
+
 ## [0.13.0] - 2026-09-20
 
 ### Features
 
-- **field**: Add a carved chunk mosaic as a third band field
 - **field**: Let the chunk field light in two accents
 - **buttons**: Give an external arrow link the diagonal arrow
+- **field**: Add a carved chunk mosaic as a third band field
+
+### Miscellaneous
+
+- **deps**: Refresh the transitive lockfile entries
+
+### Release
+
+- V0.13.0
 
 ## [0.12.3] - 2026-09-19
 
@@ -32,6 +58,10 @@ All notable changes to this project will be documented in this file.
 ### Design
 
 - **pixels**: Weight the field by side and let the footer answer the cursor
+
+### Release
+
+- V0.12.3
 
 ## [0.12.2] - 2026-09-19
 
