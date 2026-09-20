@@ -8,6 +8,7 @@ export {
   type CatalogLayout,
 } from './catalog'
 export { Card, CardGrid } from './card'
+export { Chunks } from './chunks'
 export { CodeBlock, InlineCode, Kbd } from './code'
 export { Contours } from './contours'
 export { Dialog } from './dialog'
