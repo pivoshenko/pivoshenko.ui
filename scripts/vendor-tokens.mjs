@@ -42,7 +42,9 @@ const roles = readFileSync(join(dist, 'tokens', `${flavor}.css`), 'utf8')
   .trimEnd()
 
 // Any named color can drive --accent on a subtree, the way the agents.fleet
-// page does: <html data-accent="peach">
+// page does: <html data-accent="peach">. --accent-info is retargeted the same
+// way, so a site can pick the secondary colour its sub-headings, info tags,
+// badges and callouts take without a local CSS override
 const hexTriple = (slot) => Object.fromEntries(named)[slot]
 
 const accents = named
@@ -72,6 +74,8 @@ ${roles}
 }
 
 ${accents.map((n) => `[data-accent='${n}'] {\n  --accent: var(--${n});\n}`).join('\n\n')}
+
+${accents.map((n) => `[data-sub-accent='${n}'] {\n  --accent-info: var(--${n});\n}`).join('\n\n')}
 `
 
 writeFileSync(join(pkgRoot, 'ui/tokens.css'), out)
@@ -115,7 +119,15 @@ ${Object.entries(hex)
   },
 } as const
 
-export type AccentName = keyof typeof palette.named
+// Exactly the slots \`ui/tokens.css\` emits a \`[data-accent]\` rule for, so a
+// site cannot name an accent the stylesheet will not honour. The neutrals in
+// \`palette.named\` are deliberately absent: \`data-accent=\"text\"\` matched no
+// rule and silently left \`--accent\` on its \`accent-primary\` default
+export const accentNames = [
+${accents.map((n) => `  '${n}',`).join('\n')}
+] as const
+
+export type AccentName = (typeof accentNames)[number]
 `
 
 writeFileSync(join(pkgRoot, 'ui/palette.ts'), palette)

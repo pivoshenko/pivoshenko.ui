@@ -11,9 +11,12 @@ type PageShellProps = {
   footerExtras?: FooterLink[]
   field?: FieldKind
   tint?: AccentName
+  /** Only `chunks` and `waves` honour this */
   tintAlt?: AccentName
   /** Drop the footer's field on a site that wants the band plain */
   footerPattern?: boolean
+  /** Drop the footer's website link where it would point at the site itself */
+  footerWebsite?: boolean
   children: ReactNode
 }
 
@@ -27,6 +30,7 @@ export function PageShell({
   tint,
   tintAlt,
   footerPattern = true,
+  footerWebsite = true,
   children,
 }: PageShellProps) {
   return (
@@ -40,6 +44,7 @@ export function PageShell({
           tint={tint}
           tintAlt={tintAlt}
           pattern={footerPattern}
+          website={footerWebsite}
         />
       </div>
       <ScrollToTop />

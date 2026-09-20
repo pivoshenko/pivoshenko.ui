@@ -5,7 +5,6 @@ import { type AccentName, palette } from '../palette'
 // their weight to rounding
 export const size = { width: 64, height: 64 }
 export const contentType = 'image/png'
-export const runtime = 'edge' as const
 
 // the static 800 instance, not the variable file: Satori renders a variable
 // font at one weight, so a weight declared against it did nothing. 800 rather
@@ -35,6 +34,9 @@ export default async function Icon({
         lineHeight: 1,
         fontFamily: 'JetBrains Mono',
         borderRadius: 12,
+        // the slice below runs to the hard corner at 64,64; without this it
+        // paints over the radius and squares off the bottom-right corner
+        overflow: 'hidden',
         position: 'relative',
       }}
     >
