@@ -14,7 +14,7 @@ Shared frontend artifacts (Biome config, TypeScript base, Tailwind preset, React
 
 | Import path                            | What it is                                                          |
 | -------------------------------------- | ------------------------------------------------------------------- |
-| `pivoshenko.ui`                        | React components (Nav, Footer, PageShell, Hero, Contours, Pixels, Card, ...) |
+| `pivoshenko.ui`                        | React components (Nav, Footer, PageShell, Hero, Contours, Pixels, Chunks, Card, ...) |
 | `pivoshenko.ui/biome.json`             | Shared Biome config                                                  |
 | `pivoshenko.ui/tsconfig.base.json`     | Shared TypeScript base                                               |
 | `pivoshenko.ui/postcss.config.mjs`     | Shared PostCSS config                                                |
@@ -31,7 +31,8 @@ Shared frontend artifacts (Biome config, TypeScript base, Tailwind preset, React
 The components are a native React + Tailwind implementation of the `Pivoshenko` design system: a warm
 off-black surface ramp from [`pivoshenko.theme`](https://github.com/pivoshenko/pivoshenko.theme), JetBrains
 Mono for text and Martian Mono for display, lucide icons throughout (never a text glyph), and an animated
-field behind the hero and the footer - topographic contours by default, or a quantized pixel mosaic.
+field behind the hero and the footer - topographic contours by default, a quantized pixel mosaic, or a
+carved mosaic of chunks.
 
 Every `accent` utility resolves through one live CSS variable, so a site picks its accent in one place and
 every component follows. The field is the same kind of one-place choice:
