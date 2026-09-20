@@ -29,6 +29,8 @@ type Chunk = {
   base: number
   phase: number
   rate: number
+  /** Which of the two accents this slab takes when it lights */
+  alt: boolean
 }
 
 /* A recursive split of the band into rectangles: the longer side halves at a
@@ -50,6 +52,7 @@ function carve(W: number, H: number, min: number, rand: Random): Chunk[] {
       base: rand() ** 2 * 0.82 * (0.4 + 0.6 * scale),
       phase: rand() * Math.PI * 2,
       rate: 0.5 + rand(),
+      alt: rand() < 0.5,
     })
   }
 
@@ -133,6 +136,8 @@ type ChunksProps = HTMLAttributes<HTMLDivElement> & {
   reach?: number
   colorVar?: string
   accentVar?: string
+  /** A second accent, so the field lights in two tones rather than one */
+  accentAltVar?: string
 }
 
 export function Chunks({
@@ -153,6 +158,7 @@ export function Chunks({
   reach = 200,
   colorVar = '--overlay0',
   accentVar = '--accent',
+  accentAltVar,
   className = '',
   style,
   ...rest
@@ -184,12 +190,15 @@ export function Chunks({
 
     let ink = '87 83 78'
     let hi = '141 167 209'
+    let hiAlt = hi
     let colorsDirty = true
 
     const readColors = () => {
       const cs = getComputedStyle(el)
       ink = cs.getPropertyValue(colorVar).trim() || ink
       hi = cs.getPropertyValue(accentVar).trim() || hi
+      // without a second accent the field falls back to one tone throughout
+      hiAlt = accentAltVar ? cs.getPropertyValue(accentAltVar).trim() || hi : hi
       colorsDirty = false
     }
 
@@ -278,7 +287,7 @@ export function Chunks({
         // rather than a scatter of bright slabs over empty ground
         const alpha = accent ? 0.5 + q * 0.4 : 0.14 + q * 0.55
         ctx.fillStyle = rgb(
-          accent ? hi : ink,
+          accent ? (c.alt ? hiAlt : hi) : ink,
           Math.min(1, alpha * (1 + lift * (1 - lean))),
         )
         ctx.fillRect(
@@ -394,6 +403,7 @@ export function Chunks({
     reach,
     colorVar,
     accentVar,
+    accentAltVar,
   ])
 
   return (

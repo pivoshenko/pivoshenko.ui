@@ -74,6 +74,8 @@ type SiteLayoutProps = {
   field?: FieldKind
   /** Palette slot the field's lit cells take; defaults to the site accent */
   fieldTint?: AccentName
+  /** A second slot the lit cells split between, where the field supports it */
+  fieldTintAlt?: AccentName
   /** Drop the footer's field on a site that wants the band plain */
   footerPattern?: boolean
   beforeShell?: ReactNode
@@ -88,6 +90,7 @@ export function SiteLayout({
   accent = 'peach',
   field,
   fieldTint,
+  fieldTintAlt,
   footerPattern,
   beforeShell,
   afterShell,
@@ -108,6 +111,7 @@ export function SiteLayout({
           footerExtras={footerExtras}
           field={field}
           tint={fieldTint}
+          tintAlt={fieldTintAlt}
           footerPattern={footerPattern}
         >
           {children}

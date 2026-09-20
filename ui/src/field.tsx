@@ -11,13 +11,22 @@ type FieldProps = {
   mask: 'radial' | 'bottom'
   /** Palette slot the lit cells take; defaults to the site accent */
   tint?: AccentName
+  /** A second slot the lit cells split between, where the field supports it */
+  tintAlt?: AccentName
   interactive?: boolean
 }
 
 // One tuning for both bands, so a hero and the footer under it read as the
 // same surface rather than two fields that happen to share a palette
-export function Field({ kind, mask, tint, interactive = true }: FieldProps) {
+export function Field({
+  kind,
+  mask,
+  tint,
+  tintAlt,
+  interactive = true,
+}: FieldProps) {
   const accentVar = tint ? `--${tint}` : undefined
+  const accentAltVar = tintAlt ? `--${tintAlt}` : undefined
 
   // a hero's copy sits at the left, and an opaque field under it costs more
   // legibility than a contour line does, so the pixel and chunk fields thin out
@@ -30,6 +39,7 @@ export function Field({ kind, mask, tint, interactive = true }: FieldProps) {
       <Chunks
         mask={mask === 'bottom' ? 'copy' : mask}
         accentVar={accentVar}
+        accentAltVar={accentAltVar}
         min={footer ? 22 : 30}
         gap={footer ? 3 : 4}
         levels={5}
