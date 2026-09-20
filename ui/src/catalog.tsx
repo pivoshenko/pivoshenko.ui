@@ -52,6 +52,8 @@ type CatalogProps = {
   filters?: boolean
   /** rows scan faster; cards give a long description room to breathe */
   layout?: CatalogLayout
+  /** entries navigate to their href instead of opening the dialog */
+  link?: boolean
   /** cards only: minimum track width, so a row fits as many as it can */
   min?: string
   className?: string
@@ -66,6 +68,7 @@ export function Catalog({
   archived = [],
   filters: withFilters,
   layout = 'rows',
+  link = false,
   min = '340px',
   className = '',
 }: CatalogProps) {
@@ -174,6 +177,7 @@ export function Catalog({
                 entries={block.entries}
                 layout={layout}
                 min={min}
+                link={link}
                 onOpen={setOpened}
               />
             ))}
@@ -210,6 +214,7 @@ export function Catalog({
               entries={shownArchived}
               layout={layout}
               min={min}
+              link={link}
               onOpen={setOpened}
             />
           )}
@@ -247,14 +252,29 @@ type BlockProps = {
   entries: CatalogEntry[]
   layout: CatalogLayout
   min: string
+  link: boolean
   onOpen: (entry: CatalogEntry) => void
 }
 
-function Block({ label, count, entries, layout, min, onOpen }: BlockProps) {
+function Block({
+  label,
+  count,
+  entries,
+  layout,
+  min,
+  link,
+  onOpen,
+}: BlockProps) {
   return (
     <div className="space-y-4">
       {label && <SubHeader label={label} count={count} />}
-      <Entries entries={entries} layout={layout} min={min} onOpen={onOpen} />
+      <Entries
+        entries={entries}
+        layout={layout}
+        min={min}
+        link={link}
+        onOpen={onOpen}
+      />
     </div>
   )
 }
@@ -263,15 +283,16 @@ type EntriesProps = {
   entries: CatalogEntry[]
   layout: CatalogLayout
   min: string
+  link: boolean
   onOpen: (entry: CatalogEntry) => void
 }
 
-function Entries({ entries, layout, min, onOpen }: EntriesProps) {
+function Entries({ entries, layout, min, link, onOpen }: EntriesProps) {
   if (layout === 'cards') {
     return (
       <CardGrid min={min}>
         {entries.map((entry) => (
-          <EntryCard key={entry.id} entry={entry} onOpen={onOpen} />
+          <EntryCard key={entry.id} entry={entry} link={link} onOpen={onOpen} />
         ))}
       </CardGrid>
     )
@@ -279,25 +300,35 @@ function Entries({ entries, layout, min, onOpen }: EntriesProps) {
   return (
     <List lead="1.75rem">
       {entries.map((entry) => (
-        <EntryRow key={entry.id} entry={entry} onOpen={onOpen} />
+        <EntryRow key={entry.id} entry={entry} link={link} onOpen={onOpen} />
       ))}
     </List>
   )
 }
 
+// A catalog in link mode still falls back to the dialog for an entry that
+// names no href - a row that does nothing at all is worse than one that opens
+function destination(entry: CatalogEntry, link: boolean) {
+  return link ? entry.href : undefined
+}
+
 type EntryCardProps = {
   entry: CatalogEntry
+  link: boolean
   onOpen: (entry: CatalogEntry) => void
 }
 
-function EntryCard({ entry, onOpen }: EntryCardProps) {
+function EntryCard({ entry, link, onOpen }: EntryCardProps) {
+  const href = destination(entry, link)
   return (
     <Card
       glyph={entry.icon}
       title={entry.name}
       desc={entry.description}
       clamp
-      onClick={() => onOpen(entry)}
+      href={href}
+      external={href != null}
+      onClick={href ? undefined : () => onOpen(entry)}
       className={entry.muted ? 'opacity-70' : undefined}
     >
       <Tags className="mt-3">
@@ -311,16 +342,20 @@ function EntryCard({ entry, onOpen }: EntryCardProps) {
 
 type EntryRowProps = {
   entry: CatalogEntry
+  link: boolean
   onOpen: (entry: CatalogEntry) => void
 }
 
 // A row, not a card. Sixty near-identical boxes read as a wall, and the card
 // was mostly chrome once the description moved into the dialog - a row gives
 // the description the horizontal room it wanted all along
-function EntryRow({ entry, onOpen }: EntryRowProps) {
+function EntryRow({ entry, link, onOpen }: EntryRowProps) {
+  const href = destination(entry, link)
   return (
     <Row
-      onClick={() => onOpen(entry)}
+      href={href}
+      external={href != null}
+      onClick={href ? undefined : () => onOpen(entry)}
       className={entry.muted ? 'opacity-70' : ''}
       lead={
         entry.icon ? (

@@ -33,6 +33,8 @@ type CardProps = Omit<HTMLAttributes<HTMLElement>, 'title'> & {
   foot?: ReactNode
   meta?: string[]
   static?: boolean
+  /** A link that leaves the site, which opens in a new tab */
+  external?: boolean
 }
 
 export function Card({
@@ -48,6 +50,7 @@ export function Card({
   foot,
   meta,
   static: isStatic = false,
+  external = false,
   className = '',
   ...rest
 }: CardProps) {
@@ -113,7 +116,14 @@ export function Card({
 
   if (href) {
     return (
-      <a {...rest} href={href} className={classes}>
+      <a
+        {...rest}
+        {...(external
+          ? { target: '_blank', rel: 'noopener noreferrer' }
+          : null)}
+        href={href}
+        className={classes}
+      >
         {body}
       </a>
     )
