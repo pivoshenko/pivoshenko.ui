@@ -15,6 +15,7 @@ type HeroBandProps = {
   pattern?: boolean
   field?: FieldKind
   tint?: AccentName
+  tintAlt?: AccentName
   className?: string
 }
 
@@ -28,10 +29,17 @@ export function HeroBand({
   pattern = true,
   field,
   tint,
+  tintAlt,
   className = '',
 }: HeroBandProps) {
   return (
-    <Hero pattern={pattern} field={field} tint={tint} className={className}>
+    <Hero
+      pattern={pattern}
+      field={field}
+      tint={tint}
+      tintAlt={tintAlt}
+      className={className}
+    >
       {eyebrow && (
         <p className="type-label fg-subtle">
           <span aria-hidden="true" className="text-accent">

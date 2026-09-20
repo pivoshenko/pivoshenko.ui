@@ -80,6 +80,7 @@ type FooterProps = {
   pattern?: boolean
   field?: FieldKind
   tint?: AccentName
+  tintAlt?: AccentName
   year?: number
   contact?: string
   className?: string
@@ -90,6 +91,7 @@ export function Footer({
   pattern = true,
   field = 'contours',
   tint,
+  tintAlt,
   year = new Date().getFullYear(),
   contact = 'contact@pivoshenko.dev',
   className = '',
@@ -100,7 +102,9 @@ export function Footer({
     <footer
       className={`relative mt-16 w-full border-t border-border-strong bg-crust overflow-hidden isolate ${className}`}
     >
-      {pattern ? <Field kind={field} mask="radial" tint={tint} /> : null}
+      {pattern ? (
+        <Field kind={field} mask="radial" tint={tint} tintAlt={tintAlt} />
+      ) : null}
       <div className="relative z-10 mx-auto flex h-14 max-w-6xl flex-wrap items-center justify-between gap-x-4 gap-y-2 px-4 type-meta fg-subtle sm:px-6">
         {/* the accent stub starts at the content edge rather than the viewport
             edge, matching the nav's, and keeps its fixed 96px run */}

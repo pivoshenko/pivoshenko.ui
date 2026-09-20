@@ -11,6 +11,7 @@ type PageShellProps = {
   footerExtras?: FooterLink[]
   field?: FieldKind
   tint?: AccentName
+  tintAlt?: AccentName
   /** Drop the footer's field on a site that wants the band plain */
   footerPattern?: boolean
   children: ReactNode
@@ -24,6 +25,7 @@ export function PageShell({
   footerExtras,
   field,
   tint,
+  tintAlt,
   footerPattern = true,
   children,
 }: PageShellProps) {
@@ -36,6 +38,7 @@ export function PageShell({
           extras={footerExtras}
           field={field}
           tint={tint}
+          tintAlt={tintAlt}
           pattern={footerPattern}
         />
       </div>

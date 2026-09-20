@@ -9,6 +9,8 @@ type HeroProps = {
   field?: FieldKind
   /** Palette slot the field's lit cells take; defaults to the site accent */
   tint?: AccentName
+  /** A second slot the lit cells split between, where the field supports it */
+  tintAlt?: AccentName
   /** Let the field answer the cursor. On by default - it is the page's one toy */
   interactive?: boolean
   className?: string
@@ -19,6 +21,7 @@ export function Hero({
   pattern = true,
   field = 'contours',
   tint,
+  tintAlt,
   interactive = true,
   className = '',
 }: HeroProps) {
@@ -32,6 +35,7 @@ export function Hero({
           kind={field}
           mask="bottom"
           tint={tint}
+          tintAlt={tintAlt}
           interactive={interactive}
         />
       )}
