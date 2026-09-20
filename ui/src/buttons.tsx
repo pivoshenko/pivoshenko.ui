@@ -1,4 +1,4 @@
-import { ArrowRight } from 'lucide-react'
+import { ArrowRight, ArrowUpRight } from 'lucide-react'
 import type {
   AnchorHTMLAttributes,
   ButtonHTMLAttributes,
@@ -28,25 +28,35 @@ const linkArrow: Record<ArrowLinkVariant, string> = {
 type ArrowLinkProps = AnchorHTMLAttributes<HTMLAnchorElement> & {
   children: ReactNode
   variant?: ArrowLinkVariant
+  /** A link that leaves the site, which takes the diagonal arrow */
+  external?: boolean
 }
 
 export function ArrowLink({
   children,
   variant = 'text',
+  external = false,
   className = '',
   ...rest
 }: ArrowLinkProps) {
+  const Arrow = external ? ArrowUpRight : ArrowRight
   return (
     <a
       {...rest}
       className={`group inline-flex items-center gap-2 font-mono text-[13px] leading-5 no-underline transition-colors duration-fast focus-ring ${linkVariant[variant]} ${className}`}
     >
       <span>{children}</span>
-      <ArrowRight
+      {/* the nudge follows the arrow: a diagonal one that only slid sideways
+          would read as pointing one way and moving another */}
+      <Arrow
         size={14}
         strokeWidth={2}
         aria-hidden="true"
-        className={`shrink-0 transition-transform duration-base ease-out group-hover:translate-x-1 motion-reduce:transition-none ${linkArrow[variant]}`}
+        className={`shrink-0 transition-transform duration-base ease-out motion-reduce:transition-none ${
+          external
+            ? 'group-hover:-translate-y-0.5 group-hover:translate-x-0.5'
+            : 'group-hover:translate-x-1'
+        } ${linkArrow[variant]}`}
       />
     </a>
   )
