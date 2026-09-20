@@ -2,9 +2,10 @@ import type { AccentName } from '../palette'
 import { Chunks } from './chunks'
 import { Contours } from './contours'
 import { Pixels } from './pixels'
+import { Waves } from './waves'
 
 /** Which decorative field a band paints behind its content, site-wide */
-export type FieldKind = 'chunks' | 'contours' | 'pixels'
+export type FieldKind = 'chunks' | 'contours' | 'pixels' | 'waves'
 
 type FieldProps = {
   kind: FieldKind
@@ -69,6 +70,25 @@ export function Field({
         accentLean={footer ? 0 : 0.1}
         lift={footer ? 0 : 0.6}
         opacity={footer ? 0.22 : 0.5}
+        seed={7}
+        interactive={interactive}
+      />
+    )
+  }
+
+  if (kind === 'waves') {
+    return (
+      <Waves
+        mask={mask === 'bottom' ? 'copy' : mask}
+        accentVar={accentVar}
+        accentAltVar={accentAltVar}
+        spacing={footer ? 14 : 11}
+        step={footer ? 12 : 9}
+        amp={footer ? 7 : 11}
+        accentAt={footer ? 0.66 : 0.56}
+        lift={footer ? 0 : 0.6}
+        speed={footer ? 0.55 : 0.9}
+        opacity={footer ? 0.24 : 0.5}
         seed={7}
         interactive={interactive}
       />

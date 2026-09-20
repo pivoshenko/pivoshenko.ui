@@ -31,8 +31,8 @@ Shared frontend artifacts (Biome config, TypeScript base, Tailwind preset, React
 The components are a native React + Tailwind implementation of the `Pivoshenko` design system: a warm
 off-black surface ramp from [`pivoshenko.theme`](https://github.com/pivoshenko/pivoshenko.theme), JetBrains
 Mono for text and Martian Mono for display, lucide icons throughout (never a text glyph), and an animated
-field behind the hero and the footer - topographic contours by default, a quantized pixel mosaic, or a
-carved mosaic of chunks.
+field behind the hero and the footer - topographic contours by default, a quantized pixel mosaic, a
+carved mosaic of chunks, or a dense stack of travelling wave crests beating into moire bands.
 
 Every `accent` utility resolves through one live CSS variable, so a site picks its accent in one place and
 every component follows. The field is the same kind of one-place choice:
@@ -82,4 +82,13 @@ Point a site at your local clone via `pnpm.overrides` (do not commit):
     "pivoshenko.ui": "link:../pivoshenko.ui"
   }
 }
+```
+
+The link puts the package outside the site's own directory, which Turbopack will not resolve across -
+`next build` fails on `Can't resolve 'pivoshenko.ui/postcss.config.mjs'`. Widen the root for as long as
+the override is in place (also not committed):
+
+```ts
+// site's next.config.ts
+export default { ...baseNextConfig, turbopack: { root: join(process.cwd(), '..', '..') } }
 ```
