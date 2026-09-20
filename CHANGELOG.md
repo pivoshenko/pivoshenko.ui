@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.13.0] - 2026-09-20
+
+### Features
+
+- **field**: Add a carved chunk mosaic as a third band field
+- **field**: Let the chunk field light in two accents
+- **buttons**: Give an external arrow link the diagonal arrow
+
 ## [0.12.3] - 2026-09-19
 
 ### CI/CD
