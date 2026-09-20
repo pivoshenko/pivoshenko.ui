@@ -32,7 +32,8 @@ The components are a native React + Tailwind implementation of the `Pivoshenko` 
 off-black surface ramp from [`pivoshenko.theme`](https://github.com/pivoshenko/pivoshenko.theme), JetBrains
 Mono for text and Martian Mono for display, lucide icons throughout (never a text glyph), and an animated
 field behind the hero and the footer - topographic contours by default, a quantized pixel mosaic, a
-carved mosaic of chunks, or a dense stack of travelling wave crests beating into moire bands.
+carved mosaic of chunks, a dot-matrix grid of ASCII glyphs thickening with the field under them, or a
+dense stack of travelling wave crests beating into moire bands.
 
 Every `accent` utility resolves through one live CSS variable, so a site picks its accent in one place and
 every component follows. The field is the same kind of one-place choice:

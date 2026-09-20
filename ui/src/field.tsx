@@ -1,11 +1,12 @@
 import type { AccentName } from '../palette'
+import { Ascii } from './ascii'
 import { Chunks } from './chunks'
 import { Contours } from './contours'
 import { Pixels } from './pixels'
 import { Waves } from './waves'
 
 /** Which decorative field a band paints behind its content, site-wide */
-export type FieldKind = 'chunks' | 'contours' | 'pixels' | 'waves'
+export type FieldKind = 'ascii' | 'chunks' | 'contours' | 'pixels' | 'waves'
 
 type FieldProps = {
   kind: FieldKind
@@ -34,6 +35,25 @@ export function Field({
   // behind it. The footer band is a closing note rather than an opening one, so
   // its field runs quieter than the hero's
   const footer = mask === 'radial'
+
+  if (kind === 'ascii') {
+    return (
+      <Ascii
+        mask={mask === 'bottom' ? 'copy' : mask}
+        accentVar={accentVar}
+        cell={footer ? 9 : 11}
+        rowRatio={1.8}
+        levels={7}
+        speed={footer ? 0.35 : 0.6}
+        accentAt={0.72}
+        accentLean={footer ? 0 : 0.1}
+        lift={footer ? 0 : 0.6}
+        opacity={footer ? 0.24 : 0.52}
+        seed={7}
+        interactive={interactive}
+      />
+    )
+  }
 
   if (kind === 'chunks') {
     return (
