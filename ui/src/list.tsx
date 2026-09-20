@@ -1,6 +1,6 @@
 'use client'
 
-import { ArrowRight } from 'lucide-react'
+import { ArrowRight, ArrowUpRight } from 'lucide-react'
 import type {
   CSSProperties,
   ElementType,
@@ -51,6 +51,8 @@ type RowProps = Omit<HTMLAttributes<HTMLElement>, 'title'> & {
   desc?: ReactNode
   trail?: ReactNode
   static?: boolean
+  /** A link that leaves the site: opens in a new tab and takes the diagonal arrow */
+  external?: boolean
   /** Element or component used for a linked row, overriding the list's */
   as?: ElementType
 }
@@ -62,6 +64,7 @@ export function Row({
   desc,
   trail,
   static: isStatic = false,
+  external = false,
   as,
   className = '',
   ...rest
@@ -69,6 +72,9 @@ export function Row({
   const inherited = useContext(RowAs)
   const Link = as ?? inherited
   const actionable = !isStatic && (href != null || rest.onClick != null)
+  // the nudge follows the arrow, the same rule ArrowLink follows: a diagonal
+  // arrow that only slid sideways would point one way and move another
+  const Arrow = external ? ArrowUpRight : ArrowRight
 
   const classes = `group relative grid w-full grid-cols-[1fr] sm:grid-cols-[var(--lead,88px)_1fr_auto] items-baseline gap-0.5 sm:gap-4 p-3 border-b border-faint fg-primary text-left no-underline transition-colors duration-fast focus-ring ${
     isStatic ? '' : 'hover:bg-bg-surface'
@@ -94,11 +100,13 @@ export function Row({
       <span className="inline-flex items-center gap-2 whitespace-nowrap type-meta fg-subtle">
         {trail}
         {actionable && (
-          <ArrowRight
+          <Arrow
             size={14}
             strokeWidth={2}
             aria-hidden="true"
-            className="hidden sm:block text-accent opacity-0 -translate-x-1.5 transition-[opacity,transform] duration-base ease-out group-hover:opacity-100 group-hover:translate-x-0 motion-reduce:transition-none motion-reduce:translate-x-0"
+            className={`hidden sm:block text-accent opacity-0 transition-[opacity,transform] duration-base ease-out group-hover:opacity-100 group-hover:translate-x-0 motion-reduce:transition-none motion-reduce:translate-x-0 ${
+              external ? 'translate-x-0 translate-y-1' : '-translate-x-1.5'
+            }`}
           />
         )}
       </span>
@@ -108,7 +116,14 @@ export function Row({
   if (href) {
     return (
       <li>
-        <Link {...rest} href={href} className={classes}>
+        <Link
+          {...rest}
+          {...(external
+            ? { target: '_blank', rel: 'noopener noreferrer' }
+            : null)}
+          href={href}
+          className={classes}
+        >
           {body}
         </Link>
       </li>
