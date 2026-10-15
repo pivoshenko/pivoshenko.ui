@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.17.1] - 2026-10-15
+
+### Bug fixes
+
+- **next**: Vendor the JetBrains Mono faces instead of fetching them
+
+### Documentation
+
+- **claude**: Record that the satori faces are vendored
+
+## [0.17.0] - 2026-09-20
+
+### Features
+
+- **ui**: Add sub-accent, mobile nav, and align icons and runtimes
+
 ## [0.16.0] - 2026-09-20
 
 ### Design
@@ -11,6 +27,10 @@ All notable changes to this project will be documented in this file.
 ### Features
 
 - **field**: Add a pixelized ascii glyph field
+
+### Release
+
+- V0.16.0
 
 ## [0.15.0] - 2026-09-20
 
