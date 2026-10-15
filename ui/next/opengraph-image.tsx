@@ -1,6 +1,7 @@
 import { ImageResponse } from 'next/og'
 import type { ReactElement } from 'react'
 import { type AccentName, palette } from '../palette'
+import { loadJetBrainsMono } from './fonts'
 
 export type OgImageProps = {
   brand: string
@@ -13,13 +14,6 @@ export type OgImageProps = {
 
 export const ogSize = { width: 1200, height: 630 }
 export const ogContentType = 'image/png'
-
-// static instances, not the variable file: Satori renders a variable font at
-// one weight, so a 700 declaration against it silently rendered regular
-const JETBRAINS_MONO_URL =
-  'https://fonts.gstatic.com/s/jetbrainsmono/v24/tDbY2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKxjPQ.ttf'
-const JETBRAINS_MONO_BOLD_URL =
-  'https://fonts.gstatic.com/s/jetbrainsmono/v24/tDbY2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8L6tjPQ.ttf'
 
 function OgCard({
   brand,
@@ -78,11 +72,10 @@ function OgCard({
 
 export function createOgImage(props: OgImageProps) {
   return async function handler() {
-    const [regular, bold] = await Promise.all(
-      [JETBRAINS_MONO_URL, JETBRAINS_MONO_BOLD_URL].map((url) =>
-        fetch(new URL(url)).then((res) => res.arrayBuffer()),
-      ),
-    )
+    const [regular, bold] = await Promise.all([
+      loadJetBrainsMono(400),
+      loadJetBrainsMono(700),
+    ])
     return new ImageResponse(<OgCard {...props} />, {
       ...ogSize,
       fonts: [

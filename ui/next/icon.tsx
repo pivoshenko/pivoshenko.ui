@@ -1,23 +1,17 @@
 import { ImageResponse } from 'next/og'
 import { type AccentName, palette } from '../palette'
+import { loadJetBrainsMono } from './fonts'
 
 // rendered at 64 and downsampled by the browser: at 32 the glyphs lose
 // their weight to rounding
 export const size = { width: 64, height: 64 }
 export const contentType = 'image/png'
 
-// the static 800 instance, not the variable file: Satori renders a variable
-// font at one weight, so a weight declared against it did nothing. 800 rather
-// than 700 to match the Logo component's font-extrabold
-const JETBRAINS_MONO_EXTRABOLD_URL =
-  'https://fonts.gstatic.com/s/jetbrainsmono/v24/tDbY2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8SKtjPQ.ttf'
-
 export default async function Icon({
   accent = 'peach',
 }: { accent?: AccentName } = {}) {
-  const font = await fetch(new URL(JETBRAINS_MONO_EXTRABOLD_URL)).then((res) =>
-    res.arrayBuffer(),
-  )
+  // 800 rather than 700 to match the Logo component's font-extrabold
+  const font = await loadJetBrainsMono(800)
   return new ImageResponse(
     <div
       style={{
