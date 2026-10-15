@@ -9,6 +9,7 @@
 - **Never published to npm.** Sites consume it as a git dependency pinned by tag, so a change here is not live until it is tagged **and** each site's `package.json` git ref is bumped
 - **No build step.** The `.` export points at `./ui/src/index.ts` - raw TSX, compiled by the consuming site, which is why `baseNextConfig` sets `transpilePackages: ['pivoshenko.ui']`. Do not add a bundler, a `dist/`, or emit-producing `tsc`; `config/tsconfig.base.json` sets `noEmit: true` deliberately
 - **No tests.** `just lint` is Biome only; `just typecheck` is the TypeScript pass, and `just check` runs both. Neither runs in CI, so a type error still surfaces first in a consuming site's build
+- **The Satori faces are vendored under `ui/fonts/`, never fetched.** `ui/next/fonts.ts` reads the three JetBrains Mono instances off disk because the image routes prerender, and a GitHub ARM runner has no IPv6 route - happy-eyeballs then leaves the IPv4 address 250ms and the build dies on `ETIMEDOUT`. Do not reintroduce a build-time `fetch` for a font
 - do not delete `.no-tests` without adding a real test command - `just test` fails hard when the sentinel is gone
 - do not add runtime dependencies. `lucide-react` is the only one; anything framework-level goes in `peerDependencies` plus `peerDependenciesMeta.<dep>.optional`, because a consumer pulling only `tsconfig.base.json` must not be forced to install React
 
