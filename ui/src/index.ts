@@ -1,13 +1,7 @@
 export { Ascii } from './ascii'
 export { Avatar } from './avatar'
 export { Breadcrumb, type Crumb } from './breadcrumb'
-export {
-  ArrowLink,
-  CopyPill,
-  IconButton,
-  IconLink,
-  TextButton,
-} from './buttons'
+export { ArrowLink, CopyPill, IconButton, TextButton } from './buttons'
 export { Callout, type CalloutTone } from './callout'
 export {
   Catalog,

@@ -64,12 +64,6 @@ export function ArrowLink({
 
 // == Buttons ==
 
-// shared so the button and the anchor cannot drift apart
-const iconBox =
-  'w-8 h-8 inline-flex items-center justify-center border border-card rounded-md bg-bg-sunken transition-colors duration-fast focus-ring'
-
-const iconIdle = 'fg-subtle hover-primary hover:border-border-strong'
-
 type IconButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
   active?: boolean
 }
@@ -80,26 +74,17 @@ export function IconButton({
   children,
   ...rest
 }: IconButtonProps) {
-  const state = active ? 'fg-primary border-accent' : iconIdle
+  const state = active
+    ? 'fg-primary border-accent'
+    : 'fg-subtle hover-primary hover:border-border-strong'
   return (
     <button
       type="button"
       {...rest}
-      className={`${iconBox} disabled:opacity-40 disabled:cursor-not-allowed ${state} ${className}`}
+      className={`w-8 h-8 inline-flex items-center justify-center border border-card rounded-md bg-bg-sunken transition-colors duration-fast disabled:opacity-40 disabled:cursor-not-allowed focus-ring ${state} ${className}`}
     >
       {children}
     </button>
-  )
-}
-
-type IconLinkProps = AnchorHTMLAttributes<HTMLAnchorElement>
-
-/** The anchor twin of `IconButton`, for a row of social or brand marks. */
-export function IconLink({ className = '', children, ...rest }: IconLinkProps) {
-  return (
-    <a {...rest} className={`${iconBox} ${iconIdle} ${className}`}>
-      {children}
-    </a>
   )
 }
 
