@@ -2,11 +2,25 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.18.1] - 2026-10-21
+
+### Bug fixes
+
+- **page-shell**: Size the shell with dvh so iOS stops adding a band
+
+### Refactor
+
+- **buttons**: Drop the unused IconLink
+
 ## [0.18.0] - 2026-10-21
 
 ### Features
 
 - **buttons**: Add IconLink and share the brand marks
+
+### Release
+
+- V0.18.0
 
 ## [0.17.2] - 2026-10-21
 
