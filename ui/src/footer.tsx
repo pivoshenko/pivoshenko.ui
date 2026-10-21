@@ -119,14 +119,19 @@ export function Footer({
       {pattern ? (
         <Field kind={field} mask="radial" tint={tint} tintAlt={tintAlt} />
       ) : null}
-      <div className="relative z-10 mx-auto flex h-14 max-w-6xl flex-wrap items-center justify-between gap-x-4 gap-y-2 px-4 type-meta fg-subtle sm:px-6">
+      {/* the band only holds its 56px row once the two halves fit side by side.
+          Below that it stacks and grows, because a fixed height here meets the
+          footer's own `overflow-hidden` and clips the links away entirely */}
+      <div className="relative z-10 mx-auto flex max-w-6xl flex-col items-start gap-3 px-4 py-4 type-meta fg-subtle sm:h-14 sm:flex-row sm:items-center sm:justify-between sm:gap-4 sm:px-6 sm:py-0">
         {/* the accent stub starts at the content edge rather than the viewport
-            edge, matching the nav's, and keeps its fixed 96px run */}
-        <span className="relative flex h-full items-center">
-          <span
-            aria-hidden="true"
-            className="absolute left-0 -top-px h-[2px] w-24 bg-accent"
-          />
+            edge, matching the nav's, and keeps its fixed 96px run. It hangs off
+            the band rather than the line of text, so a wrapped credit cannot
+            drag it down the band */}
+        <span
+          aria-hidden="true"
+          className="absolute -top-px left-4 h-[2px] w-24 bg-accent sm:left-6"
+        />
+        <span>
           {year} Volodymyr Pivoshenko &lt;
           <a
             href={`mailto:${contact}`}
