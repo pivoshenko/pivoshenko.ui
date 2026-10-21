@@ -2,11 +2,21 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.18.0] - 2026-10-21
+
+### Features
+
+- **buttons**: Add IconLink and share the brand marks
+
 ## [0.17.2] - 2026-10-21
 
 ### Bug fixes
 
 - **footer**: Stack the band below sm so the links are not clipped
+
+### Release
+
+- V0.17.2
 
 ## [0.17.1] - 2026-10-15
 
