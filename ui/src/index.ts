@@ -1,7 +1,13 @@
 export { Ascii } from './ascii'
 export { Avatar } from './avatar'
 export { Breadcrumb, type Crumb } from './breadcrumb'
-export { ArrowLink, CopyPill, IconButton, TextButton } from './buttons'
+export {
+  ArrowLink,
+  CopyPill,
+  IconButton,
+  IconLink,
+  TextButton,
+} from './buttons'
 export { Callout, type CalloutTone } from './callout'
 export {
   Catalog,
@@ -36,6 +42,7 @@ export { Highlights } from './highlights'
 export { Checkbox, SearchField, TextInput } from './inputs'
 export { List, Row } from './list'
 export { Brand, Logo } from './logo'
+export { GitHubMark, LinkedInMark } from './marks'
 export { Menu, MenuHeader, MenuItem, MenuSeparator } from './menu'
 export { Nav, type NavLink } from './nav'
 export { PageBody, PageShell } from './page-shell'
