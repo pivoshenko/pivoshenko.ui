@@ -21,7 +21,10 @@ type PageShellProps = {
 }
 
 // `main` carries no width of its own, so a page can alternate full-bleed bands
-// (Hero, a canvas) with constrained ones (PageBody) without fighting a wrapper
+// (Hero, a canvas) with constrained ones (PageBody) without fighting a wrapper.
+// The shell is `dvh` rather than `vh`: iOS resolves `100vh` against the
+// toolbar-hidden viewport, which left the shell taller than the visible page
+// and opened a band of canvas under the footer
 export function PageShell({
   brand,
   navLinks,
@@ -35,7 +38,7 @@ export function PageShell({
 }: PageShellProps) {
   return (
     <>
-      <div className="flex min-h-screen flex-col">
+      <div className="flex min-h-dvh flex-col">
         <Nav brand={brand} links={navLinks} />
         <main className="w-full flex-1">{children}</main>
         <Footer
