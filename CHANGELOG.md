@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.17.2] - 2026-10-21
+
+### Bug fixes
+
+- **footer**: Stack the band below sm so the links are not clipped
+
 ## [0.17.1] - 2026-10-15
 
 ### Bug fixes
@@ -11,6 +17,10 @@ All notable changes to this project will be documented in this file.
 ### Documentation
 
 - **claude**: Record that the satori faces are vendored
+
+### Release
+
+- V0.17.1
 
 ## [0.17.0] - 2026-09-20
 
