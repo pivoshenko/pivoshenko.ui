@@ -4,7 +4,7 @@ export const baseNextConfig: NextConfig = {
   reactStrictMode: true,
   transpilePackages: ['pivoshenko.ui'],
   // next dev otherwise writes its own CLAUDE.md and AGENTS.md into the site
-  // directory, shadowing the single pair each repo keeps at its root
+  // directory, shadowing the single AGENTS.md each repo keeps at its root
   agentRules: false,
   async headers() {
     return [

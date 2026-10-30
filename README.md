@@ -45,7 +45,7 @@ every component follows. The field is the same kind of one-place choice:
 Any named palette slot works - `peach`, `blue`, `teal`, `mauve`, and the rest of the 14. A subtree can
 override it with a plain `data-accent` attribute.
 
-`CLAUDE.md` documents the full token and helper-class vocabulary; point at it rather than copying the list.
+`AGENTS.md` documents the full token and helper-class vocabulary; point at it rather than copying the list.
 
 ## Consumption
 
