@@ -50,6 +50,7 @@ export function Field({
         accentLean={footer ? 0 : 0.1}
         lift={footer ? 0 : 0.6}
         opacity={footer ? 0.24 : 0.52}
+        quietCopy={footer ? 0 : 0.7}
         seed={7}
         interactive={interactive}
       />

@@ -76,6 +76,14 @@ const GLYPH_SCALE = 1.6
 
 const FALLBACK_FAMILY = 'ui-monospace, monospace'
 
+/* Columns a quiet copy area takes to ease back into the full field, so its edge
+   dissolves instead of reading as a line */
+const QUIET_FEATHER = 24
+
+/* The noise clusters around 0.5, so a threshold below this hides almost nothing
+   and the feather has to start here or its whole fade lands in a few columns */
+const QUIET_FLOOR = 0.35
+
 type AsciiProps = HTMLAttributes<HTMLDivElement> & {
   variant?: AsciiVariant
   mask?: AsciiMask
@@ -97,6 +105,10 @@ type AsciiProps = HTMLAttributes<HTMLDivElement> & {
   accentLean?: number
   /** Extra alpha at the left edge, where a band's mask thins the field out */
   lift?: number
+  /** Field value a glyph must reach to paint in the columns the host band's text
+      and icons span. The cursor's bump counts towards it, so the copy stays
+      sparse at rest and the field still answers the pointer there. 0 disables it */
+  quietCopy?: number
   seed?: number
   interactive?: boolean
   scale?: number
@@ -118,6 +130,7 @@ export function Ascii({
   accentAt = 0.72,
   accentLean = 0,
   lift = 0,
+  quietCopy = 0,
   seed = 11,
   interactive = true,
   scale = 0.07,
@@ -179,6 +192,42 @@ export function Ascii({
       H = Math.max(1, r.height)
       cv.width = Math.round(W * dpr)
       cv.height = Math.round(H * dpr)
+      measureCopy()
+    }
+
+    // == Copy ==
+
+    let quietAt = new Float32Array(0)
+
+    const measureCopy = () => {
+      const host = el.parentElement
+      if (!quietCopy || !host) return
+      const rects: DOMRect[] = []
+      const range = document.createRange()
+      const text = document.createTreeWalker(host, NodeFilter.SHOW_TEXT)
+      while (text.nextNode()) {
+        if (!text.currentNode.nodeValue?.trim()) continue
+        range.selectNodeContents(text.currentNode)
+        rects.push(...range.getClientRects())
+      }
+      for (const media of host.querySelectorAll('svg, img')) {
+        rects.push(media.getBoundingClientRect())
+      }
+      const origin = el.getBoundingClientRect().left
+      const cols = Math.ceil(W / cell)
+      quietAt = new Float32Array(cols)
+      for (const r of rects) {
+        const from = Math.floor((r.left - origin) / cell)
+        const to = Math.ceil((r.right - origin) / cell)
+        const start = Math.max(0, from - QUIET_FEATHER)
+        const end = Math.min(cols, to + QUIET_FEATHER)
+        for (let x = start; x < end; x++) {
+          const away = x < from ? from - x : x >= to ? x - to + 1 : 0
+          const at =
+            QUIET_FLOOR + (quietCopy - QUIET_FLOOR) * (1 - away / QUIET_FEATHER)
+          quietAt[x] = Math.max(quietAt[x], at)
+        }
+      }
     }
 
     // == Pointer ==
@@ -244,6 +293,8 @@ export function Ascii({
             const dy = y * row + row / 2 - ptr.y
             v += ptr.a * bump * Math.exp(-(dx * dx + dy * dy) / R2)
           }
+
+          if (v < quietAt[x]) continue
 
           // a scanline dims every other row, the way a glyph display flickers
           if (variant === 'scan' && y % 2 === 1) v *= 0.55
@@ -326,6 +377,12 @@ export function Ascii({
     })
     ro.observe(el)
 
+    // a late web font rewraps the copy without resizing the band
+    document.fonts.ready.then(() => {
+      measureCopy()
+      draw(performance.now())
+    })
+
     const io =
       'IntersectionObserver' in window
         ? new IntersectionObserver((entries) => {
@@ -365,6 +422,7 @@ export function Ascii({
     accentAt,
     accentLean,
     lift,
+    quietCopy,
     seed,
     interactive,
     scale,
