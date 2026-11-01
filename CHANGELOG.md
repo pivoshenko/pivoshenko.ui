@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.19.0] - 2026-11-01
+
+### Documentation
+
+- Move agent instructions from CLAUDE.md to AGENTS.md
+
+### Features
+
+- **ascii**: Thin the field behind hero copy at rest
+
 ## [0.18.1] - 2026-10-21
 
 ### Bug fixes
@@ -11,6 +21,10 @@ All notable changes to this project will be documented in this file.
 ### Refactor
 
 - **buttons**: Drop the unused IconLink
+
+### Release
+
+- V0.18.1
 
 ## [0.18.0] - 2026-10-21
 
