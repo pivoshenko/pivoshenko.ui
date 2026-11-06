@@ -67,7 +67,7 @@ This project uses [`just`](https://github.com/casey/just) as its task runner. Ru
 | --- | --- |
 | `just install` | Installs the project dependencies |
 | `just format` | Formats the project |
-| `just lint` | Lints the project |
+| `just lint` | Lints the project with Biome and typechecks it |
 | `just test` | No test command yet; skipped when the `.no-tests` sentinel is present |
 | `just check` | Runs `lint` then `test` in sequence |
 | `just update` | Upgrades the dependencies recursively across the workspace |
